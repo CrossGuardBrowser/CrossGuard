@@ -6655,7 +6655,7 @@ bool ChromeContentBrowserClient::HandleWebUI(
   if (!ChromeWebUIControllerFactory::GetInstance()->UseWebUIForURL(
           browser_context, *url) &&
       !content::WebUIConfigMap::GetInstance().GetConfig(
-          browser_context, url::Origin::Create(*url))) {
+          browser_context, url::Origin::Create(*url).GetURL())) {
     return false;
   }
 
