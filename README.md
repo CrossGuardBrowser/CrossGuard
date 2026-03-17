@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="ui/corssguard.png" alt="CrossGuard Logo" width="120">
+  <img src="ui/crossguard.png" alt="CrossGuard Logo" width="120">
 </p>
 
 <h1 align="center">CrossGuard</h1>
