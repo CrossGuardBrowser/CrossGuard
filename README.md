@@ -5,11 +5,11 @@
 <h1 align="center">CrossGuard</h1>
 
 <p align="center">
-  基于 Chromium 114 的开源指纹浏览器，支持多环境隔离与全参数指纹配置
+  基于 Chromium 138 的开源指纹浏览器，支持多环境隔离与全参数指纹配置
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Chromium-114.0.5735.199-blue" alt="Chromium Version">
+  <img src="https://img.shields.io/badge/Chromium-138-blue" alt="Chromium Version">
   <img src="https://img.shields.io/badge/Platform-Windows-green" alt="Platform">
   <img src="https://img.shields.io/badge/License-GPL-orange" alt="License">
 </p>
@@ -79,7 +79,7 @@
 ### 运行
 
 ```bash
-cd launcher/
+cd CrossGuardLauncher/
 
 # 启动管理界面 + Chrome
 python launcher.py
@@ -96,6 +96,7 @@ python launcher.py --chrome "path/to/chrome.exe" --port 18900
 ### 打包
 
 ```bash
+cd CrossGuardLauncher/
 pip install pyinstaller
 
 # 打包 exe + 免安装包
@@ -108,29 +109,30 @@ ISCC.exe setup.iss
 ## 项目结构
 
 ```
-CrossGuard/
-├── chrome/              # Chromium 浏览器进程补丁
-│   ├── app/             #   启动入口、AES 加解密、指纹 JSON 解析
-│   └── browser/         #   URL Loader 代理、WebRTC/DNT 策略
-├── third_party/blink/   # Blink 渲染引擎补丁 (指纹注入核心)
-├── content/             # 字体代理、Mojo IPC
-├── components/          # UA、语言、权限补丁
-├── base/                # 指纹全局单例
-├── cc/                  # 命令行 switch 定义
-├── ui/                  # 分辨率欺骗、Logo
-├── assets/              # 截图资源
-└── launcher/            # Python 启动器
-    ├── launcher.py      #   HTTP 服务 + Chrome 环境管理
-    ├── config.html      #   Web 管理界面
-    ├── build.py         #   打包脚本
-    └── docs/            #   开发文档
+CrossGuard/                 # Chromium 138 补丁文件 (覆盖到 chromium/src/)
+├── chrome/                 #   浏览器进程补丁
+│   └── app/                #     启动入口、AES 加解密、指纹 JSON 解析
+├── third_party/blink/      #   Blink 渲染引擎补丁 (指纹注入核心)
+├── content/                #   字体代理、Mojo IPC
+├── components/             #   UA、语言、权限补丁
+├── base/                   #   指纹全局单例
+├── cc/                     #   命令行 switch 定义
+├── net/                    #   主机名、MAC 地址欺骗
+├── ui/                     #   分辨率欺骗、Logo
+└── assets/                 #   截图资源
+
+CrossGuardLauncher/         # Python 启动器 (独立目录)
+├── launcher.py             #   HTTP 服务 + Chrome 环境管理
+├── config.html             #   Web 管理界面
+├── build.py                #   打包脚本
+└── docs/                   #   开发文档
 ```
 
-详细文档见 [`launcher/docs/`](launcher/docs/):
-- [编译打包指南](launcher/docs/BUILD.md)
-- [架构说明](launcher/docs/ARCHITECTURE.md)
-- [配置路径说明](launcher/docs/CONFIG.md)
-- [二次开发指南](launcher/docs/DEVELOPMENT.md)
+详细文档见 [`CrossGuardLauncher/docs/`](../CrossGuardLauncher/docs/):
+- [编译打包指南](../CrossGuardLauncher/docs/BUILD.md)
+- [架构说明](../CrossGuardLauncher/docs/ARCHITECTURE.md)
+- [配置路径说明](../CrossGuardLauncher/docs/CONFIG.md)
+- [二次开发指南](../CrossGuardLauncher/docs/DEVELOPMENT.md)
 
 ## 联系我们
 
