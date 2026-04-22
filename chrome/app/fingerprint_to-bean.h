@@ -28,7 +28,11 @@ blink::fp::Fingerprint JsonToBean(const Json::Value& fingerprintJson) {
         !fingerprintJson.isMember("speechVoices")||!fingerprintJson["speechVoices"].isObject()||
         !fingerprintJson.isMember("resourceInfo")||!fingerprintJson["resourceInfo"].isObject()||
         !fingerprintJson.isMember("doNotTrack")||!fingerprintJson["doNotTrack"].isObject()||
-        !fingerprintJson.isMember("openPort")||!fingerprintJson["openPort"].isObject()){
+        !fingerprintJson.isMember("openPort")||!fingerprintJson["openPort"].isObject()||
+        !fingerprintJson.isMember("deviceName")||!fingerprintJson["deviceName"].isObject()||
+        !fingerprintJson.isMember("macAddress")||!fingerprintJson["macAddress"].isObject()||
+        !fingerprintJson.isMember("ssl")||!fingerprintJson["ssl"].isObject()||
+        !fingerprintJson.isMember("hardwareAcceleration")||!fingerprintJson["hardwareAcceleration"].isObject()){
             return fingerprint_;
         }
 
@@ -493,6 +497,40 @@ blink::fp::Fingerprint JsonToBean(const Json::Value& fingerprintJson) {
             }
         }
          fingerprint_.openPort.url=fingerprintJson["openPort"]["url"].asString();
+    }
+
+    // DeviceName
+    if (fingerprintJson.isMember("deviceName") && fingerprintJson["deviceName"].isObject() &&
+        fingerprintJson["deviceName"].isMember("type") && fingerprintJson["deviceName"]["type"].isInt()) {
+        fingerprint_.deviceName.type = fingerprintJson["deviceName"]["type"].asInt();
+        if (fingerprint_.deviceName.type > 1) {
+            if (fingerprintJson["deviceName"].isMember("value") && fingerprintJson["deviceName"]["value"].isString()) {
+                fingerprint_.deviceName.value = fingerprintJson["deviceName"]["value"].asString();
+            }
+        }
+    }
+
+    // MacAddress
+    if (fingerprintJson.isMember("macAddress") && fingerprintJson["macAddress"].isObject() &&
+        fingerprintJson["macAddress"].isMember("type") && fingerprintJson["macAddress"]["type"].isInt()) {
+        fingerprint_.macAddress.type = fingerprintJson["macAddress"]["type"].asInt();
+    }
+
+    // SSL
+    if (fingerprintJson.isMember("ssl") && fingerprintJson["ssl"].isObject() &&
+        fingerprintJson["ssl"].isMember("type") && fingerprintJson["ssl"]["type"].isInt()) {
+        fingerprint_.sslFingerprint.type = fingerprintJson["ssl"]["type"].asInt();
+        if (fingerprint_.sslFingerprint.type > 1) {
+            if (fingerprintJson["ssl"].isMember("profile") && fingerprintJson["ssl"]["profile"].isString()) {
+                fingerprint_.sslFingerprint.profile = fingerprintJson["ssl"]["profile"].asString();
+            }
+        }
+    }
+
+    // HardwareAcceleration
+    if (fingerprintJson.isMember("hardwareAcceleration") && fingerprintJson["hardwareAcceleration"].isObject() &&
+        fingerprintJson["hardwareAcceleration"].isMember("type") && fingerprintJson["hardwareAcceleration"]["type"].isInt()) {
+        fingerprint_.hardwareAcceleration.type = fingerprintJson["hardwareAcceleration"]["type"].asInt();
     }
     fingerprint_.init = fingerprintJson["init"].asInt();
     return fingerprint_;

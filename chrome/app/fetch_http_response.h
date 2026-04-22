@@ -2,9 +2,9 @@
 #include <winhttp.h>
 #include <iostream>
 #include <string>
-#include <json/json.h>
+#include "third_party/jsoncpp/source/include/json/json.h"
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 #include "cc/base/switches.h"
 #include "base/command_line.h"
 #include "fingerprint_to-bean.h"
@@ -22,8 +22,16 @@ struct AipKey {
   uint32_t webPort;
   uint32_t timestamp;
 };
-const char* aeskey = "oyb8ZvjMd+VvP/mQ";
-const char*  aesEnKey = "KDHpjtQuysmq8rVO";
+static std::string getAesKey() {
+    char buf[64] = {};
+    GetEnvironmentVariableA("CG_KEY_REQUEST", buf, sizeof(buf));
+    return std::string(buf);
+}
+static std::string getAesEnKey() {
+    char buf[64] = {};
+    GetEnvironmentVariableA("CG_KEY_RESPONSE", buf, sizeof(buf));
+    return std::string(buf);
+}
 std::string sendHttpPostRequest(const int& webProt,
                                 const LPCWSTR& path,
                                 const char* strPtr) {
@@ -86,7 +94,7 @@ int jsonToInit(AipKey aipKey) {
   
     std::string requestBody = "{\"timestamp\":" + std::to_string(timestamp) +
                             ",\"id\":" + std::to_string(aipKey.id) + "}";
-    std::string aesRequestBody = diyEncrypt(requestBody, aeskey);
+    std::string aesRequestBody = diyEncrypt(requestBody, getAesKey());
     //std::string aesRequestBody = requestBody;
     std::string jsonStr = sendHttpPostRequest(
         aipKey.webPort, L"launcher/getOpenFingerprint", aesRequestBody.c_str());
@@ -109,7 +117,7 @@ int jsonToInit(AipKey aipKey) {
         }
         Json::Value data;
         if(root["data"].isString()){
-            std::string strData = diyDecrypted(root["data"].asString(),aesEnKey);
+            std::string strData = diyDecrypted(root["data"].asString(), getAesEnKey());
             parsingSuccessful =
                 reader->parse(strData.c_str(), strData.c_str() + strData.size(),
                               &data, &errors);
@@ -162,12 +170,12 @@ AipKey getAipKey(const std::string& jsonStr) {
 
 int FetchHttpResponse() {
     const base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
-    if(!command_line->HasSwitch(cc::switches::kApiKey)){
+    if(!command_line->HasSwitch(switches::kApiKey)){
          base::SingletonFingerprint::Init();
          return 0;    
     }
-    const std::string apiKey =command_line->GetSwitchValueASCII(cc::switches::kApiKey);
-    std::string strJsonAipKey = diyDecrypted(apiKey,aeskey);
+    const std::string apiKey =command_line->GetSwitchValueASCII(switches::kApiKey);
+    std::string strJsonAipKey = diyDecrypted(apiKey, getAesKey());
     if (strJsonAipKey.empty()) {
          std::cout << "异常数据" << std::endl;
          std::exit(0);

@@ -1,12 +1,12 @@
 #include "third_party/blink/renderer/modules/canvas/canvas2d/canvas_rendering_context_2d_fp.h"
 
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
 #include "third_party/blink/renderer/core/html/canvas/html_canvas_element_fp.h"
 
 #include <cmath>
 #include "third_party/blink/renderer/modules/canvas/canvas2d/canvas_rendering_context_2d.h"
-#include "third_party/blink/renderer/bindings/core/v8/v8_union_float32array_uint16array_uint8clampedarray.h"
+#include "third_party/blink/renderer/bindings/core/v8/v8_union_float16array_float32array_uint8clampedarray.h"
 #include "third_party/blink/renderer/bindings/modules/v8/v8_typedefs.h"
 
 
@@ -73,17 +73,12 @@ bool fpCanvas(blink::CanvasRenderingContext* ctx, const blink::CanvasRenderingCo
     if (ctx->getFpCanvas()) {
         return true;
     }
-    blink::CanvasStyle* style;
-    if (isFill) {
-        style = state.FillStyle();
-    }else {
-        style = state.StrokeStyle();
-    }
+    const blink::CanvasStyle& style = isFill ? state.FillStyle() : state.StrokeStyle();
 
-    if (style->GetCanvasGradient()) {
+    if (style.GetCanvasGradient()) {
         return true;
     }
-    else if (style->GetCanvasPattern()) {
+    else if (style.GetCanvasPattern()) {
         return true;
     }
 

@@ -363,6 +363,44 @@ struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::OpenPortDataView,
                    ::blink::fp::OpenPort* out);
 };
 
+template <>
+struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::DeviceNameDataView,
+                                        ::blink::fp::DeviceName> {
+  static int32_t type(const ::blink::fp::DeviceName& data) { return data.type; }
+  static const std::string& value(const ::blink::fp::DeviceName& data) {
+    return data.value;
+  }
+  static bool Read(blink::mojom::DeviceNameDataView data,
+                   ::blink::fp::DeviceName* out);
+};
+
+template <>
+struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::MacAddressDataView,
+                                        ::blink::fp::MacAddress> {
+  static int32_t type(const ::blink::fp::MacAddress& data) { return data.type; }
+  static bool Read(blink::mojom::MacAddressDataView data,
+                   ::blink::fp::MacAddress* out);
+};
+
+template <>
+struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::SSLFingerprintDataView,
+                                        ::blink::fp::SSLFingerprint> {
+  static int32_t type(const ::blink::fp::SSLFingerprint& data) { return data.type; }
+  static const std::string& profile(const ::blink::fp::SSLFingerprint& data) {
+    return data.profile;
+  }
+  static bool Read(blink::mojom::SSLFingerprintDataView data,
+                   ::blink::fp::SSLFingerprint* out);
+};
+
+template <>
+struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::HardwareAccelerationDataView,
+                                        ::blink::fp::HardwareAcceleration> {
+  static int32_t type(const ::blink::fp::HardwareAcceleration& data) { return data.type; }
+  static bool Read(blink::mojom::HardwareAccelerationDataView data,
+                   ::blink::fp::HardwareAcceleration* out);
+};
+
 
 /**/
 template <>
@@ -442,6 +480,22 @@ struct BLINK_COMMON_EXPORT StructTraits<blink::mojom::FingerprintDataView,
   static const ::blink::fp::OpenPort& openPort(
       const ::blink::fp::Fingerprint& data) {
     return data.openPort;
+  }
+  static const ::blink::fp::DeviceName& deviceName(
+      const ::blink::fp::Fingerprint& data) {
+    return data.deviceName;
+  }
+  static const ::blink::fp::MacAddress& macAddress(
+      const ::blink::fp::Fingerprint& data) {
+    return data.macAddress;
+  }
+  static const ::blink::fp::SSLFingerprint& sslFingerprint(
+      const ::blink::fp::Fingerprint& data) {
+    return data.sslFingerprint;
+  }
+  static const ::blink::fp::HardwareAcceleration& hardwareAcceleration(
+      const ::blink::fp::Fingerprint& data) {
+    return data.hardwareAcceleration;
   }
   static bool Read(blink::mojom::FingerprintDataView data,
                    ::blink::fp::Fingerprint* out);

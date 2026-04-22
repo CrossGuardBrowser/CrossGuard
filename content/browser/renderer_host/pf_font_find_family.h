@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include "base/containers/flat_map.h"
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 
 
 

@@ -1,7 +1,7 @@
 #ifndef THIRD_PARTY_BLINK_RENDERER_PLATFORM_FONTS_WIN_FONT_CACHE_SKIA_WIN_FP_H_
 #define THIRD_PARTY_BLINK_RENDERER_PLATFORM_FONTS_WIN_FONT_CACHE_SKIA_WIN_FP_H_
 
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
 #include "third_party/blink/renderer/platform/fonts/font_selection_types.h"
 

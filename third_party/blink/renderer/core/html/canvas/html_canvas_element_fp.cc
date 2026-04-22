@@ -1,9 +1,10 @@
 #include "third_party/blink/renderer/core/html/canvas/html_canvas_element_fp.h"
 
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
 
 #include "base/memory/scoped_refptr.h"
+#include "base/rand_util.h"
 #include "third_party/skia/include/core/SkImageInfo.h"
 #include "third_party/blink/renderer/platform/graphics/image_data_buffer.h"
 #include "third_party/blink/renderer/platform/graphics/static_bitmap_image.h"
@@ -11,17 +12,31 @@
 
 namespace blink {
 
+namespace {
+
+// Generate a random noise offset in range [-3, 3] for natural-looking noise.
+int RandomNoiseOffset() {
+  return base::RandInt(-3, 3);
+}
+
+}  // namespace
+
 
 
 
 void CanvasFpIng::fpPixel(unsigned char* mutablePixels,std::vector<blink::fp::ColoredPoint> list,int bytesPerPixel,int width,int height) {
-       
-        int start=list[0].row;
+
+        if (list.empty() || width <= 0 || height <= 0 || bytesPerPixel <= 0 || !mutablePixels)
+            return;
+
+        std::size_t bufferSize = static_cast<std::size_t>(width) * height * bytesPerPixel;
+
+        int start=list[0].row % height;
         int end = start;
         for (std::size_t i = 0; i < list.size(); ++i) {
-            blink::fp::ColoredPoint coloredPoint = list[0];
-            
-            int  zend = coloredPoint.row%height;
+            blink::fp::ColoredPoint coloredPoint = list[i];
+
+            int  zend = coloredPoint.row % height;
             if(zend>start&&zend>=end){
                end=zend;
             }else if(zend<start&&start<end&&zend>end){
@@ -29,7 +44,7 @@ void CanvasFpIng::fpPixel(unsigned char* mutablePixels,std::vector<blink::fp::Co
             }else if(zend<start&&start>end){
                end=zend;
             }
-            
+
             int index =coloredPoint.column%width;
             int cloumnStart=0;
             int cloumnEnd=width;
@@ -39,36 +54,38 @@ void CanvasFpIng::fpPixel(unsigned char* mutablePixels,std::vector<blink::fp::Co
                 cloumnStart=width;
                 cloumnEnd=0;
                 cloumnStep=-1;
-                index=-index; 
+                index=-index;
             }
 
             int  exist=-1;
             int  endExist=-1;
             while(true){
-                
+
 
                 while (cloumnStart!=cloumnEnd)
                 {
-                    
-                    std::size_t pixelIndex= end * width* bytesPerPixel + cloumnStart* bytesPerPixel;
+
+                    std::size_t pixelIndex= static_cast<std::size_t>(end) * width * bytesPerPixel + static_cast<std::size_t>(cloumnStart) * bytesPerPixel;
+                    if (pixelIndex + bytesPerPixel > bufferSize)
+                        break;
                     for(int j=0;j<bytesPerPixel;j++){
                         if(mutablePixels[pixelIndex+j]>0){
                             exist++;
                             endExist=cloumnStart;
-                            break;     
+                            break;
                         }
                     }
                     if(index==exist){
-                        break;     
+                        break;
                     }
                     cloumnStart=cloumnStart+cloumnStep;
                 }
 
                 if(endExist!=-1){
-                    break;   
+                    break;
                 }
 
-                end=(end+1)%height; 
+                end=(end+1)%height;
                 if (coloredPoint.column<0) {
                     cloumnStart = width;
                 } else {
@@ -80,22 +97,24 @@ void CanvasFpIng::fpPixel(unsigned char* mutablePixels,std::vector<blink::fp::Co
 
             }
 
-            std::vector<int> rgba = {coloredPoint.red,coloredPoint.green,coloredPoint.blue,coloredPoint.alpha};
-
+            // Use random noise instead of deterministic rgba offsets
+            // to avoid detection by fingerprint scanners like browserscan.net
             for (int j = 0; j < bytesPerPixel; j++)
             {
-                std::size_t pixelIndex= end * width* bytesPerPixel + cloumnStart * bytesPerPixel;
-                int pixel=mutablePixels[pixelIndex+j]+rgba[j];
-                if(pixel>255||pixel<0){
-                    pixel=mutablePixels[pixelIndex+j]-rgba[j];
-                }
+                std::size_t pixelIndex= static_cast<std::size_t>(end) * width * bytesPerPixel + static_cast<std::size_t>(cloumnStart) * bytesPerPixel;
+                if (pixelIndex + j >= bufferSize)
+                    break;
+                int noise = RandomNoiseOffset();
+                int pixel = mutablePixels[pixelIndex+j] + noise;
+                if(pixel>255) pixel = 255;
+                if(pixel<0) pixel = 0;
                 mutablePixels[pixelIndex+j]= static_cast<unsigned char>(pixel);
             }
-            
-           end=(end+1)%height; 
+
+           end=(end+1)%height;
            if(start==end){
                 return;
-           } 
+           }
         }
 
 
@@ -138,8 +157,8 @@ void CanvasFpIng::fpToDataURLInternal(blink::ImageDataBuffer* data_buffer, blink
             return;
         }
         
-        const unsigned char* pixels = data_buffer->Pixels();
-        unsigned char* mutablePixels = const_cast<unsigned char*>(pixels);
+        const base::span<const uint8_t> pixel_span = data_buffer->PixelData();
+        unsigned char* mutablePixels = const_cast<unsigned char*>(pixel_span.data());
         int bytesPerPixel = skImageInfo.bytesPerPixel();
 
         fpPixel(mutablePixels,coloredPointList,bytesPerPixel,width,height);
@@ -158,7 +177,7 @@ scoped_refptr<blink::StaticBitmapImage> CanvasFpIng::fpToBlob(scoped_refptr<blin
     if(!isCanvas&&!isWebGL&&!isGpuGL){
           return image_bitmap;
     }
-    SkImageInfo skImageInfo =image_bitmap->GetSkImageInfo();
+    SkImageInfo skImageInfo =image_bitmap->PaintImageForCurrentFrame().GetSkImageInfo();
     int width = skImageInfo.width();
     int height = skImageInfo.height();
     if(width<11||height<11){
@@ -188,7 +207,7 @@ scoped_refptr<blink::StaticBitmapImage> CanvasFpIng::fpToBlob(scoped_refptr<blin
         int bytesPerPixel = skImageInfo.bytesPerPixel();
         
         fpPixel(mutablePixels,coloredPointList,bytesPerPixel,width,height);
-        sk_sp<SkData> skiaData = SkData::MakeWithoutCopy(FpToBlob->data(), FpToBlob->size());
+        sk_sp<SkData> skiaData = SkData::MakeWithCopy(FpToBlob->data(), FpToBlob->size());
         return blink::StaticBitmapImage::Create(std::move(skiaData), skImageInfo);
         
     }

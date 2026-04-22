@@ -5,9 +5,8 @@
 #include "third_party/blink/renderer/core/frame/navigator_concurrent_hardware.h"
 
 #include "base/system/sys_info.h"
-
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 
 namespace blink {
 

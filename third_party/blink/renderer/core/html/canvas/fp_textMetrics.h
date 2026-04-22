@@ -6,7 +6,7 @@
 #include "ui/gfx/geometry/rect.h"
 #include "third_party/blink/renderer/platform/fonts/font.h"
 #include "third_party/blink/renderer/platform/fonts/font_family.h"
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 //#include "third_party/blink/renderer/core/html/canvas/text_metrics.h"
 
 namespace blink {

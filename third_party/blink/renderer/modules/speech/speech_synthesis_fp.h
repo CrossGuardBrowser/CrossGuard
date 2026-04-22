@@ -1,7 +1,7 @@
 #ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_SPEECH_SPEECH_SYNTHESIS_VOICE_FP_H_
 #define THIRD_PARTY_BLINK_RENDERER_MODULES_SPEECH_SPEECH_SYNTHESIS_VOICE_FP_H_
 
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
 
 #include "third_party/blink/public/mojom/speech/speech_synthesis.mojom-blink-forward.h"
@@ -28,9 +28,9 @@ bool fpGetVoices(
                 const blink::fp::SpeechVoicesInfo& info = list[i];
                 
                 blink::mojom::blink::SpeechSynthesisVoicePtr prt0= blink::mojom::blink::SpeechSynthesisVoice::New();
-                prt0->voice_uri=WTF::String(info.voiceUri.c_str(), info.voiceUri.length());
-                prt0->name = WTF::String(info.name.c_str(), info.name.length());
-                prt0->lang =WTF::String(info.lang.c_str(), info.lang.length());
+                prt0->voice_uri=String::FromUTF8(info.voiceUri);
+                prt0->name = String::FromUTF8(info.name);
+                prt0->lang =String::FromUTF8(info.lang);
                 prt0->is_local_service = info.isLocalService;
                 prt0->is_default = info.isDefault;
                 fpVoices.push_back(blink::MakeGarbageCollected<blink::SpeechSynthesisVoice>(std::move(prt0)));

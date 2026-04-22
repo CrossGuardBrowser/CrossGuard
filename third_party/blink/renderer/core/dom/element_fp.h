@@ -6,8 +6,9 @@
 #include <cmath>
 #include "third_party/blink/renderer/core/dom/element.h"
 #include "third_party/blink/renderer/core/geometry/dom_rect_list.h"
+#include "third_party/blink/renderer/core/style/computed_style.h"
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 #include "ui/gfx/geometry/rect_f.h"
 
 

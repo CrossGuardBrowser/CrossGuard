@@ -4,7 +4,7 @@
 
 
 
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
 
 #include "third_party/blink/renderer/platform/wtf/vector.h"

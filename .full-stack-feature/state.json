@@ -1,0 +1,23 @@
+{
+  "feature": "平台选择,对应的UA也要跟随变化",
+  "status": "complete",
+  "stack": "auto-detect",
+  "api_style": "rest",
+  "complexity": "medium",
+  "current_step": "complete",
+  "current_phase": 3,
+  "completed_steps": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "files_created": [
+    "01-requirements.md",
+    "02-database-design.md",
+    "03-architecture.md",
+    "04-database-impl.md",
+    "05-backend-impl.md",
+    "06-frontend-impl.md",
+    "07-testing.md",
+    "08-deployment.md",
+    "09-documentation.md"
+  ],
+  "started_at": "2026-03-31T00:00:00Z",
+  "last_updated": "2026-03-31T00:00:00Z"
+}

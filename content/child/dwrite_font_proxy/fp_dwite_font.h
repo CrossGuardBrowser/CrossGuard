@@ -2,7 +2,7 @@
 #define CONTENT_CHILD_DWRITE_FONT_PROXY_FP_DWITE_FONT_H_
 
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 
 void fpLoadFamilyCoreLockRequired(UINT32* index,std::u16string* name){
     // base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();

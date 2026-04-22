@@ -56,8 +56,8 @@ SingletonFingerprint* SingletonFingerprint::ForCurrentProcess(){
     fingerprint.init = 0;
     singletonFingerprint_->fingerprint_ = fingerprint;
     singletonFingerprint_->init_ = true;*/
-    DCHECK(singletonFingerprint_);
-   return singletonFingerprint_;    
+    CHECK(singletonFingerprint_);
+   return singletonFingerprint_;
 }
 
 }  // namespace base

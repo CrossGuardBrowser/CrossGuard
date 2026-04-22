@@ -200,9 +200,31 @@ namespace fp {
 
   struct BLINK_COMMON_EXPORT OpenPort{
         public:
-            int type = 0; 
+            int type = 0;
             std::vector<int> openPort;
             std::string url;
+  };
+
+  struct BLINK_COMMON_EXPORT DeviceName {
+        public:
+            int type = 0;
+            std::string value;
+  };
+
+  struct BLINK_COMMON_EXPORT MacAddress {
+        public:
+            int type = 0;
+  };
+
+  struct BLINK_COMMON_EXPORT SSLFingerprint {
+        public:
+            int type = 0;
+            std::string profile;
+  };
+
+  struct BLINK_COMMON_EXPORT HardwareAcceleration {
+        public:
+            int type = 0;
   };
 
 
@@ -230,6 +252,10 @@ namespace fp {
             ResourceInfo resourceInfo;
             DoNotTrack doNotTrack;
             OpenPort openPort;
+            DeviceName deviceName;
+            MacAddress macAddress;
+            SSLFingerprint sslFingerprint;
+            HardwareAcceleration hardwareAcceleration;
     };
 } // namespace pf
 }  // namespace blink    

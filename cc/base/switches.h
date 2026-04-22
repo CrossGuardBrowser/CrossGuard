@@ -13,7 +13,6 @@
 // Since cc is used from the render process, anything that goes here also needs
 // to be added to render_process_host_impl.cc.
 
-namespace cc {
 namespace switches {
 
 // Switches for the renderer compositor only.
@@ -60,20 +59,16 @@ CC_BASE_EXPORT extern const char kCompositedRenderPassBorders[];
 CC_BASE_EXPORT extern const char kCompositedSurfaceBorders[];
 CC_BASE_EXPORT extern const char kCompositedLayerBorders[];
 
-CC_BASE_EXPORT extern const char kUIEnableLayerLists[];
-
 CC_BASE_EXPORT extern const char kEnableClippedImageScaling[];
-
-CC_BASE_EXPORT extern const char kAnimatedImageResume[];
 
 // Test related.
 CC_BASE_EXPORT extern const char kCCLayerTreeTestNoTimeout[];
 CC_BASE_EXPORT extern const char kCCLayerTreeTestLongTimeout[];
 CC_BASE_EXPORT extern const char kCCScrollAnimationDurationForTesting[];
 
-//fp
+// CrossGuard custom switches.
 CC_BASE_EXPORT extern const char kApiKey[];
+
 }  // namespace switches
-}  // namespace cc
 
 #endif  // CC_BASE_SWITCHES_H_

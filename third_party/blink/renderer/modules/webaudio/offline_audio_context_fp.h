@@ -2,7 +2,7 @@
 #define THIRD_PARTY_BLINK_RENDERER_MODULES_WEBAUDIO_OFFLINE_AUDIO_CONTEXT_FP_H_
 
 #include <cmath>
-#include "base/singleton_fingerprint.h"
+#include "third_party/blink/public/common/fingerprint/singleton_fingerprint.h"
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
 
 #include "third_party/blink/renderer/modules/webaudio/audio_buffer.h"

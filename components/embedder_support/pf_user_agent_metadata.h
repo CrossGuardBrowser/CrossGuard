@@ -24,10 +24,21 @@ blink::UserAgentMetadata fpUserAgentMetadata() {
           metadata.model = t_metadata.model;
           metadata.mobile = t_metadata.mobile;
           metadata.bitness = t_metadata.bitness;
+          metadata.wow64 = t_metadata.wow64;
         }
 
    return metadata;
- 
+
+}
+
+// Return custom UA string from fingerprint, or empty string if not set.
+std::string fpGetUserAgent() {
+    base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+    blink::fp::Fingerprint t_fingerprint = t_singletonFingerprint->GetFingerprint();
+    if (base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.ua.type > 1) {
+        return t_fingerprint.ua.userAgent;
+    }
+    return "";
 }
 
 
