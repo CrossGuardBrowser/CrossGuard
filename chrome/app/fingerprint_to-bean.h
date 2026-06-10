@@ -1,5 +1,59 @@
 #include <json/json.h>
+#include <string>
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
+
+
+// ---- 解析辅助 ----------------------------------------------------------------
+// 旧代码每个字段都做 isMember + isInt/asInt/isString/asString 链式校验,样板很长。
+// 新增字段时鼓励改用这些 TryGet* 模板,逻辑等价但少 5-10 行。
+// 不修改已有调用点以避免破坏当前可工作的代码。
+//
+// 用法示例:
+//   int t = 0;
+//   if (TryGetInt(obj, "type", &t)) { ... }
+//   std::string s;
+//   if (TryGetString(obj, "value", &s)) { ... }
+//
+inline bool TryGetInt(const Json::Value& obj, const char* key, int* out) {
+    if (!obj.isObject() || !obj.isMember(key) || !obj[key].isInt() || out == nullptr) {
+        return false;
+    }
+    *out = obj[key].asInt();
+    return true;
+}
+
+inline bool TryGetUInt(const Json::Value& obj, const char* key, unsigned int* out) {
+    if (!obj.isObject() || !obj.isMember(key) || !obj[key].isUInt() || out == nullptr) {
+        return false;
+    }
+    *out = obj[key].asUInt();
+    return true;
+}
+
+inline bool TryGetBool(const Json::Value& obj, const char* key, bool* out) {
+    if (!obj.isObject() || !obj.isMember(key) || !obj[key].isBool() || out == nullptr) {
+        return false;
+    }
+    *out = obj[key].asBool();
+    return true;
+}
+
+inline bool TryGetString(const Json::Value& obj, const char* key, std::string* out) {
+    if (!obj.isObject() || !obj.isMember(key) || !obj[key].isString() || out == nullptr) {
+        return false;
+    }
+    *out = obj[key].asString();
+    return true;
+}
+
+inline bool TryGetDouble(const Json::Value& obj, const char* key, double* out) {
+    if (!obj.isObject() || !obj.isMember(key) || !obj[key].isDouble() || out == nullptr) {
+        return false;
+    }
+    *out = obj[key].asDouble();
+    return true;
+}
+// -----------------------------------------------------------------------------
 
 
 blink::fp::Fingerprint JsonToBean(const Json::Value& fingerprintJson) {
@@ -514,6 +568,13 @@ blink::fp::Fingerprint JsonToBean(const Json::Value& fingerprintJson) {
     if (fingerprintJson.isMember("macAddress") && fingerprintJson["macAddress"].isObject() &&
         fingerprintJson["macAddress"].isMember("type") && fingerprintJson["macAddress"]["type"].isInt()) {
         fingerprint_.macAddress.type = fingerprintJson["macAddress"]["type"].asInt();
+        if (fingerprint_.macAddress.type > 1) {
+            if (fingerprintJson["macAddress"].isMember("value") &&
+                fingerprintJson["macAddress"]["value"].isString()) {
+                fingerprint_.macAddress.value =
+                    fingerprintJson["macAddress"]["value"].asString();
+            }
+        }
     }
 
     // SSL

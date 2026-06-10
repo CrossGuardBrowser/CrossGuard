@@ -3,11 +3,11 @@
 
 #include "base/singleton_fingerprint.h"
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
-#include "third_party/blink/public/mojom/permissions_policy/permissions_policy_feature.mojom-forward.h"
+#include "services/network/public/mojom/permissions_policy/permissions_policy_feature.mojom-forward.h"
 
 bool requestPermissionFp(
-    blink::mojom::PermissionsPolicyFeature permissions_policy_feature_) {
-    if (blink::mojom::PermissionsPolicyFeature::kGeolocation != permissions_policy_feature_) {
+    network::mojom::PermissionsPolicyFeature permissions_policy_feature_) {
+    if (network::mojom::PermissionsPolicyFeature::kGeolocation != permissions_policy_feature_) {
       return false;
     }
 

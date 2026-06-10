@@ -214,6 +214,9 @@ namespace fp {
   struct BLINK_COMMON_EXPORT MacAddress {
         public:
             int type = 0;
+            // 自定义 MAC 地址,格式 "XX:XX:XX:XX:XX:XX" 或 "XX-XX-XX-XX-XX-XX"。
+            // type > 1 且非空时使用该值;空字符串时退化为全 0(原有行为)。
+            std::string value;
   };
 
   struct BLINK_COMMON_EXPORT SSLFingerprint {
