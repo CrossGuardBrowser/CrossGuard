@@ -3919,12 +3919,15 @@ ScriptValue WebGLRenderingContextBase::getParameter(ScriptState* script_state,
                          String(ContextGL()->GetString(GL_RENDERER))));
         }
         {
+          if (!base::SingletonFingerprint::HasInstance()) goto _fp_fallback_renderer;
           base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+          if (!t_singletonFingerprint) goto _fp_fallback_renderer;
           blink::fp::Fingerprint t_fingerprint = t_singletonFingerprint->GetFingerprint();
           if(base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.webGLDevice.type>1){
             return WebGLAny(script_state, String(t_fingerprint.webGLDevice.renderer));
           }
         }
+        _fp_fallback_renderer:
         return WebGLAny(script_state,
                         String(ContextGL()->GetString(GL_RENDERER)));
       }
@@ -3941,12 +3944,15 @@ ScriptValue WebGLRenderingContextBase::getParameter(ScriptState* script_state,
                          String(ContextGL()->GetString(GL_VENDOR))));
         }
         {
+          if (!base::SingletonFingerprint::HasInstance()) goto _fp_fallback_vendor;
           base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+          if (!t_singletonFingerprint) goto _fp_fallback_vendor;
           blink::fp::Fingerprint t_fingerprint = t_singletonFingerprint->GetFingerprint();
           if(base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.webGLDevice.type>1){
             return WebGLAny(script_state, String(t_fingerprint.webGLDevice.vendors));
           }
         }
+        _fp_fallback_vendor:
         return WebGLAny(script_state,
                         String(ContextGL()->GetString(GL_VENDOR)));
       }

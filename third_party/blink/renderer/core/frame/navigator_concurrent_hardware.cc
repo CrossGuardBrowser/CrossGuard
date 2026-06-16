@@ -11,7 +11,11 @@
 namespace blink {
 
 unsigned NavigatorConcurrentHardware::hardwareConcurrency() const {
+     if (!base::SingletonFingerprint::HasInstance())
+       return static_cast<unsigned>(base::SysInfo::NumberOfProcessors());
      base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+     if (!t_singletonFingerprint)
+       return static_cast<unsigned>(base::SysInfo::NumberOfProcessors());
      blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
      if(base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.resourceInfo.type>1){
         return static_cast<unsigned>(t_fingerprint.resourceInfo.cpu);

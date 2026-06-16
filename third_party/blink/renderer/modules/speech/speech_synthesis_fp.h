@@ -17,7 +17,9 @@ bool fpGetVoices(
         blink::HeapVector<blink::Member<blink::SpeechSynthesisVoice>>& fpVoices){
 
 
+    if (!base::SingletonFingerprint::HasInstance()) return false;
     base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+    if (!t_singletonFingerprint) return false;
     blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
     if(base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.speechVoices.type > 1 ){
             if(fpVoices.size() > 0){

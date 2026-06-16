@@ -24,7 +24,9 @@ void fpReadPixelsHelper(GLint x,GLint y,
     return;
   }
 
+  if (!base::SingletonFingerprint::HasInstance()) return;
   base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+  if (!t_singletonFingerprint) return;
   blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
   if (base::SingletonFingerprint::GetInit(t_singletonFingerprint)&&t_fingerprint.webGL.type > 1) {
     base::CheckedNumeric<GLuint> offset_in_bytes = offset;

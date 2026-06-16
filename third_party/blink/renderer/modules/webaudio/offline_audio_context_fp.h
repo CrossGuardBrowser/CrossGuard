@@ -42,7 +42,9 @@ float fpfracPart(float number, float fp, uint32_t length) {
 
 void fpFireCompletionEvent(blink::AudioBuffer* rendered_buffer){
 
+    if (!base::SingletonFingerprint::HasInstance()) return;
     base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+    if (!t_singletonFingerprint) return;
     blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
     if(base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.audioContext.type > 1 ){
 

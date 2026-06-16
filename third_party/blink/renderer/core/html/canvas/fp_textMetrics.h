@@ -29,7 +29,9 @@ namespace blink {
 bool fpTextMetricsCypher(blink::fp::FpTextMetrics& textMetric, const blink::Font& font, gfx::RectF& glyph_bounds, float dx,
                         float ascent, float descent, float baseline_y){
 
+     if (!base::SingletonFingerprint::HasInstance()) return false;
      base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+     if (!t_singletonFingerprint) return false;
      blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
       if(base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.font.type > 1){
          base::flat_map<std::string, blink::fp::FontInfo> fontMap = t_fingerprint.font.fontMap;

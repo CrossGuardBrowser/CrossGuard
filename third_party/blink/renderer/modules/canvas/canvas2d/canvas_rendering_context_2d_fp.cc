@@ -31,7 +31,9 @@ void fpGetImageData(blink::ImageData* imageData,bool flag,
         return;
     }
 
+    if (!base::SingletonFingerprint::HasInstance()) return;
     base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+    if (!t_singletonFingerprint) return;
     blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
     if (base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.canvas.type > 0) {
         std::vector<blink::fp::ColoredPoint>  coloredPointList= t_fingerprint.canvas.coloredPointList;

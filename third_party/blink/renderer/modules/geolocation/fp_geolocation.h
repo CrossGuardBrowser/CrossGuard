@@ -12,7 +12,9 @@
 #include "base/time/time.h"
 
 bool fpOnPositionUpdated(){
+  if (!base::SingletonFingerprint::HasInstance()) return false;
   base::SingletonFingerprint* t_singletonFingerprint =base::SingletonFingerprint::ForCurrentProcess();
+  if (!t_singletonFingerprint) return false;
   blink::fp::Fingerprint t_fingerprint =t_singletonFingerprint->GetFingerprint();
   if (base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.location.type > 1) {
     return true;
@@ -23,7 +25,9 @@ bool fpOnPositionUpdated(){
 
 blink::Geoposition* fpCreateGeoposition() {
 
+  if (!base::SingletonFingerprint::HasInstance()) return nullptr;
   base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+  if (!t_singletonFingerprint) return nullptr;
   blink::fp::Fingerprint t_fingerprint =t_singletonFingerprint->GetFingerprint();
   blink::fp::Location location = t_fingerprint.location;
     

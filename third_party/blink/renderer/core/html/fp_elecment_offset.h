@@ -13,7 +13,9 @@ int fpOffsetWidth(const blink::LayoutBoxModelObject* layout_object, String tagNa
    if(!tagName.EndsWithIgnoringASCIICase("span")){
       return result;
    }
+   if (!base::SingletonFingerprint::HasInstance()) return result;
    base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+   if (!t_singletonFingerprint) return result;
     blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
       if(base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.font.type > 1){
          base::flat_map<std::string, blink::fp::FontInfo> fontMap = t_fingerprint.font.fontMap;
@@ -38,7 +40,9 @@ int fpOffsetHeight(const blink::LayoutBoxModelObject* layout_object, String tagN
     if (!tagName.EndsWithIgnoringASCIICase("span")) {
         return result;
     }
+    if (!base::SingletonFingerprint::HasInstance()) return result;
     base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+    if (!t_singletonFingerprint) return result;
     blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
     if (base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.font.type > 1) {
         base::flat_map<std::string, blink::fp::FontInfo> fontMap = t_fingerprint.font.fontMap;

@@ -7,7 +7,9 @@
 
 void fpJsGetRect(gfx::Rect& window_rect){
 
+    if (!base::SingletonFingerprint::HasInstance()) return;
     base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+    if (!t_singletonFingerprint) return;
     blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
         if(base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.resolution.type>1){
             window_rect.set_width(t_fingerprint.resolution.monitorWidth);     

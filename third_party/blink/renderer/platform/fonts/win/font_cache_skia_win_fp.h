@@ -10,7 +10,9 @@ void fpCreateFontPlatformData(blink::FontSelectionValue& variant_stretch,
                               blink::FontSelectionValue Tvariant_stretch,
                               std::string fontName ) {
 
+      if (!base::SingletonFingerprint::HasInstance()) return;
       base::SingletonFingerprint* t_singletonFingerprint =base::SingletonFingerprint::ForCurrentProcess();
+      if (!t_singletonFingerprint) return;
       blink::fp::Fingerprint t_fingerprint = t_singletonFingerprint->GetFingerprint();
       if (base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.font.type > 1) {
         base::flat_map<std::string, blink::fp::FontInfo> fontMap =t_fingerprint.font.fontMap;

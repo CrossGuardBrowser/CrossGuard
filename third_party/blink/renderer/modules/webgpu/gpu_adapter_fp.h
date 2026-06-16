@@ -10,7 +10,9 @@
 #include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 
 blink::GPUAdapterInfo* fpRequestAdapterInfo(blink::GPUAdapterInfo* adapter_info, bool flag) {
+    if (!base::SingletonFingerprint::HasInstance()) return adapter_info;
     base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+    if (!t_singletonFingerprint) return adapter_info;
     blink::fp::Fingerprint t_fingerprint = t_singletonFingerprint->GetFingerprint();
     if (base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.webGLDevice.type > 1) {
         blink::GPUAdapterInfo* T_adapter_info;

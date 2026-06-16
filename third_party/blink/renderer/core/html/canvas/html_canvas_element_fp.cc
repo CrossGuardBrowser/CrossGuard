@@ -4,22 +4,12 @@
 #include "third_party/blink/public/common/fingerprint/fingerprint.h"
 
 #include "base/memory/scoped_refptr.h"
-#include "base/rand_util.h"
 #include "third_party/skia/include/core/SkImageInfo.h"
 #include "third_party/blink/renderer/platform/graphics/image_data_buffer.h"
 #include "third_party/blink/renderer/platform/graphics/static_bitmap_image.h"
 #include "third_party/blink/renderer/core/html/canvas/canvas_rendering_context.h"
 
 namespace blink {
-
-namespace {
-
-// Generate a random noise offset in range [-3, 3] for natural-looking noise.
-int RandomNoiseOffset() {
-  return base::RandInt(-3, 3);
-}
-
-}  // namespace
 
 
 
@@ -97,17 +87,25 @@ void CanvasFpIng::fpPixel(unsigned char* mutablePixels,std::vector<blink::fp::Co
 
             }
 
-            // Use random noise instead of deterministic rgba offsets
-            // to avoid detection by fingerprint scanners like browserscan.net
+            // Deterministic per-channel offsets taken from the profile
+            // fingerprint. The canvas readback MUST be byte-for-byte identical
+            // on every read within a session; scanners such as browserscan.net
+            // render and read the canvas twice and flag any difference as
+            // "artificially modified". Random per-call noise is exactly what
+            // gets detected, so the offset must depend only on the profile.
+            int rgba[4] = {coloredPoint.red, coloredPoint.green,
+                           coloredPoint.blue, coloredPoint.alpha};
             for (int j = 0; j < bytesPerPixel; j++)
             {
                 std::size_t pixelIndex= static_cast<std::size_t>(end) * width * bytesPerPixel + static_cast<std::size_t>(cloumnStart) * bytesPerPixel;
                 if (pixelIndex + j >= bufferSize)
                     break;
-                int noise = RandomNoiseOffset();
-                int pixel = mutablePixels[pixelIndex+j] + noise;
-                if(pixel>255) pixel = 255;
-                if(pixel<0) pixel = 0;
+                int offset = (j < 4) ? rgba[j] : 0;
+                int pixel = mutablePixels[pixelIndex+j] + offset;
+                // Keep the channel in range while staying deterministic: if the
+                // addition overflows, subtract the same offset instead.
+                if (pixel > 255 || pixel < 0)
+                    pixel = mutablePixels[pixelIndex+j] - offset;
                 mutablePixels[pixelIndex+j]= static_cast<unsigned char>(pixel);
             }
 
@@ -141,7 +139,9 @@ void CanvasFpIng::fpToDataURLInternal(blink::ImageDataBuffer* data_buffer, blink
         return;
     }
 
+    if (!base::SingletonFingerprint::HasInstance()) return;
     base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+    if (!t_singletonFingerprint) return;
     blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
     if (base::SingletonFingerprint::GetInit(t_singletonFingerprint)) {
 
@@ -156,13 +156,13 @@ void CanvasFpIng::fpToDataURLInternal(blink::ImageDataBuffer* data_buffer, blink
         }else{
             return;
         }
-        
+
         const base::span<const uint8_t> pixel_span = data_buffer->PixelData();
         unsigned char* mutablePixels = const_cast<unsigned char*>(pixel_span.data());
         int bytesPerPixel = skImageInfo.bytesPerPixel();
 
         fpPixel(mutablePixels,coloredPointList,bytesPerPixel,width,height);
-        
+
     }
 
 }
@@ -184,7 +184,9 @@ scoped_refptr<blink::StaticBitmapImage> CanvasFpIng::fpToBlob(scoped_refptr<blin
         return image_bitmap;
     }
 
+    if (!base::SingletonFingerprint::HasInstance()) return image_bitmap;
     base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+    if (!t_singletonFingerprint) return image_bitmap;
     blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
     if (base::SingletonFingerprint::GetInit(t_singletonFingerprint)) {
 

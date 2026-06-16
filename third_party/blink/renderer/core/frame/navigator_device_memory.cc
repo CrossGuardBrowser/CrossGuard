@@ -16,7 +16,11 @@
 namespace blink {
 
 float NavigatorDeviceMemory::deviceMemory() const {
+  if (!base::SingletonFingerprint::HasInstance())
+    return ApproximatedDeviceMemory::GetApproximatedDeviceMemory();
   base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
+  if (!t_singletonFingerprint)
+    return ApproximatedDeviceMemory::GetApproximatedDeviceMemory();
   blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
   if(base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.resourceInfo.type>1){
     return static_cast<float>(t_fingerprint.resourceInfo.memory);
