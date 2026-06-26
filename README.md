@@ -170,6 +170,9 @@ CrossGuardLauncher/         # Python 启动器 (独立目录)
 
 ## 联系我们
 
+QQ群：1035164839
+<img src="assets/img-006.png" alt="指纹检测" width="800">
+
 <img src="assets/img-005.png" alt="指纹检测" width="800">
 
 > 请注意保护您的隐私和安全，在加入公开讨论群组时谨慎提供个人信息。
