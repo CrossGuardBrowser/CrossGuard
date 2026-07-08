@@ -10,7 +10,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Chromium-138-blue" alt="Chromium Version">
-  <img src="https://img.shields.io/badge/Version-2.2.40-brightgreen" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.3.1-brightgreen" alt="Version">
   <img src="https://img.shields.io/badge/Platform-Windows-green" alt="Platform">
   <img src="https://img.shields.io/badge/License-GPL-orange" alt="License">
   <img src="https://img.shields.io/badge/MCP-AI%20Automation-purple" alt="MCP">
