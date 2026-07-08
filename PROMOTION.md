@@ -117,5 +117,5 @@ python launcher.py   # 启动管理界面 + Chrome
 </p>
 
 <p align="center">
-  <sub>Chromium 138 · v2.3.1 · GPL · Made for privacy & automation</sub>
+  <sub>Chromium 138 · v2.3.2 · GPL · Made for privacy & automation</sub>
 </p>
