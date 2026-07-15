@@ -5,7 +5,7 @@
 <h1 align="center">CrossGuard — 让每一个浏览器身份都独一无二</h1>
 
 <p align="center">
-  🛡️ 基于 Chromium 138 的开源指纹浏览器 · 多环境隔离 · 全参数指纹伪装 · AI 自动化<br>
+  🛡️ 基于 Chromium 138 的开源指纹浏览器 · 多环境隔离 · 全参数指纹伪装 · AI / RPA 自动化<br>
   <sub>一个软件，管理无限个互不关联的浏览器身份</sub>
 </p>
 
@@ -14,6 +14,7 @@
   <img src="https://img.shields.io/badge/指纹维度-25%2B-brightgreen">
   <img src="https://img.shields.io/badge/BrowserScan-≈100%25%20真实-success">
   <img src="https://img.shields.io/badge/MCP-AI%20自动化-purple">
+  <img src="https://img.shields.io/badge/RPA-31%20Actions-teal">
   <img src="https://img.shields.io/badge/开源-GPL-orange">
 </p>
 
@@ -39,10 +40,11 @@
 ### 2. 🌐 IP 智能联动，细节自洽
 启用代理后，CrossGuard **自动**根据出口 IP 匹配正确的时区、语言、地理位置、语音引擎——再也不用担心「美国 IP + 北京时区」这种低级破绽。配套 DNS 防泄露与 WebRTC 真实 IP 保护，代理链路滴水不漏。
 
-### 3. 🤖 独家 MCP AI 自动化
-内置 MCP（Model Context Protocol）服务——**让 Claude、Cursor 等 AI 直接远程操控你的指纹浏览器**。13 个工具覆盖「选环境 → 启动 → 导航 → 执行 JS → 截图 → Cookie → 关闭」全流程。
+### 3. 🤖 双引擎自动化：AI（MCP）+ 零代码 RPA
+- **MCP AI 自动化**：内置 MCP（Model Context Protocol）服务——**让 Claude、Cursor 等 AI 直接远程操控你的指纹浏览器**。13 个工具覆盖「选环境 → 启动 → 导航 → 执行 JS → 截图 → Cookie → 关闭」全流程。
+- **RPA 流程自动化**：31 个动作的可视化编排器（参照影刀），选环境 → 拖步骤 → 手动 / 定时运行。支持 CSS / XPath、变量 `{{VAR}}`、条件 / 循环 / try 子流程、网络抓包转步骤——**不懂代码也能搞定复杂自动化**。
 
-> 告诉 AI：「打开环境 7，登录协作平台，把今天的待办截图给我」——它就帮你做完。
+> 告诉 AI「打开环境 7，登录协作平台，截图待办」它就帮你做完；或用 RPA 把重复操作录成可定时复跑的流程。
 
 ### 4. 🗂️ 真正的多环境隔离
 每个环境拥有独立的 Cookie、LocalStorage、历史记录、缓存、指纹配置。**N 个环境 = N 台独立的电脑**，互不干扰，一键切换。
@@ -75,11 +77,13 @@
 
 **网络与代理**：HTTP / HTTPS / SOCKS4 / SOCKS5 · 用户名密码认证 · IP 智能联动（时区/语言/地理/语音）· WebRTC 防泄露 · DNS 防泄露
 
-**环境管理**：Web UI 可视化管理 · 一键创建/编辑/启动 · Cookie/LocalStorage 完全隔离 · Cookie 注入
+**环境管理**：Material-3 风格 Web UI · 一键创建/编辑/启动 · Cookie/LocalStorage 完全隔离 · Cookie 注入 · 出口 IP 一键检测
 
-**AI 自动化**：MCP 协议 · 13 个工具 · Bearer Token 鉴权 · 支持远程部署
+**AI / RPA 自动化**：MCP 协议 · 13 个工具 · Bearer Token 鉴权 · 支持远程部署；RPA 31 动作可视化编排 · CSS/XPath · 变量与子流程 · 定时调度 · 抓包转步骤
 
-**工程质量**：Chromium 138 最新内核 · 各类重型 SPA 长时稳定 · BrowserScan ≈100% 真实
+**插件与云端**：本地 CRX / Chrome 商店 / Edge 商店安装扩展 · 每环境独立启用；独立后端 CrossGuardServer 多机同步（书签/历史推送拉取、完整环境快照）
+
+**工程质量**：Chromium 138 最新内核 · 各类重型 SPA 长时稳定 · BrowserScan ≈100% 真实 · 管理 UI 本地构建离线可用 · 安装包体积优化（≈170MB）
 
 ---
 
@@ -92,6 +96,9 @@
 | 指纹维度 | 25+ | 20+ | 仅 UA/Cookie |
 | IP 智能联动 | ✅ | ✅ | ❌ |
 | AI 自动化 (MCP) | ✅ 独家 | ❌ | ❌ |
+| RPA 流程自动化 | ✅ 31 动作 | ❌ / 需另购 | ❌ |
+| 云端多机同步 | ✅ 开源自部署 | ✅ 闭源托管 | ❌ |
+| 插件管理 | ✅ 每环境独立 | ✅ | ✅ |
 | 订阅费用 | **免费** | 💰💰💰 | 免费 |
 | 多环境隔离 | ✅ | ✅ | ❌ |
 
@@ -117,5 +124,5 @@ python launcher.py   # 启动管理界面 + Chrome
 </p>
 
 <p align="center">
-  <sub>Chromium 138 · v2.3.2 · GPL · Made for privacy & automation</sub>
+  <sub>Chromium 138 · v2.3.7 · GPL · Made for privacy & automation</sub>
 </p>
