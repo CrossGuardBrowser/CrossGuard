@@ -10,7 +10,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Chromium-138.0.7204.50-blue" alt="Chromium Version">
-  <img src="https://img.shields.io/badge/Version-2.3.9-brightgreen" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.3.12-brightgreen" alt="Version">
   <img src="https://img.shields.io/badge/Platform-Windows-green" alt="Platform">
   <img src="https://img.shields.io/badge/License-GPL-orange" alt="License">
   <img src="https://img.shields.io/badge/MCP-AI%20Automation-purple" alt="MCP">
@@ -44,6 +44,7 @@
 - **云端同步** — 独立后端服务，多机同步环境（推送 / 拉取书签与浏览历史、上传完整环境快照）
 - **Material-3 管理界面** — 全新 Tailwind + Material Design 3 风格 Web UI，本地构建、离线可用、零外部依赖
 - **常驻系统托盘** — 启动即驻留系统托盘，关闭主窗口最小化到托盘后台运行，右键托盘一键退出并关闭所有环境进程
+- **AI 对话侧栏** — 每个环境浏览器内置 AI 助手（右上角按钮 + 右侧对话面板），支持配置多个 OpenAI 兼容模型（Kimi / GLM / DeepSeek / 通义 / OpenAI / Ollama），可读取当前页面内容作为上下文，流式回复；API Key 加密存储于本机、永不下发
 
 ## 截图
 
