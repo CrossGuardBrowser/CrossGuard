@@ -1,0 +1,60 @@
+/* CrossGuard 原生 chat WebUI 样式(从扩展 content.js 移植,去 Shadow DOM) */
+html, body {
+  height: 100%; margin: 0; padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  font-size: 14px; color: #1f2329; background: #fff;
+  --cg-primary: #409EFF;
+}
+* { box-sizing: border-box; }
+
+.panel { display: flex; flex-direction: column; height: 100vh; }
+.header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #ebeef5; }
+.title { font-weight: 600; color: #1f2329; }
+.env-badge { font-size: 12px; color: #909399; background: #f4f4f5; padding: 2px 8px; border-radius: 999px; }
+
+.messages { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 14px; background: #f7f8fa; }
+.msg { margin-bottom: 12px; display: flex; flex-direction: column; max-width: 100%; min-width: 0; }
+.msg.user { align-items: flex-end; }
+.msg.assistant { align-items: flex-start; }
+.bubble { max-width: 88%; min-width: 0; padding: 9px 12px; border-radius: 12px; line-height: 1.55; word-break: break-word; overflow-wrap: anywhere; white-space: normal; }
+.msg.user .bubble { background: var(--cg-primary); color: #fff; border-bottom-right-radius: 4px; }
+.msg.assistant .bubble { background: #fff; color: #1f2329; border: 1px solid #ebeef5; border-bottom-left-radius: 4px; }
+.bubble pre { background: #1f2329; color: #e6e8eb; padding: 8px 10px; border-radius: 8px; overflow-x: auto; margin: 6px 0; font-size: 12.5px; }
+.bubble code { font-family: Consolas, Monaco, monospace; }
+.bubble p { margin: 0 0 6px; }
+.bubble p:last-child { margin-bottom: 0; }
+.bubble img { max-width: 100%; max-height: 360px; border-radius: 6px; display: block; }
+
+.tool-step { display: inline-flex; align-items: center; gap: 5px; background: #f0f5ff; border: 1px solid #d6e4ff; border-radius: 6px; padding: 3px 7px; margin: 2px 3px 2px 0; font-size: 12px; }
+.tool-step.tool-warn { background: #fff7e6; border-color: #ffd591; }
+.tool-step .step-icon { font-size: 13px; }
+.tool-step code { font-size: 11px; background: #f5f5f5; padding: 1px 4px; border-radius: 3px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: middle; }
+.tool-result { background: #f7f8fa !important; font-size: 12px; color: #606266; padding: 2px 8px !important; }
+.tool-result code { word-break: break-all; font-size: 11px; }
+.step-result { margin-right: 4px; }
+
+.empty { color: #909399; text-align: center; margin-top: 40px; font-size: 13px; }
+
+.footer { border-top: 1px solid #ebeef5; padding: 8px 10px; background: #fff; }
+.toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+select.model { flex: 1; min-width: 0; height: 30px; border: 1px solid #dcdfe6; border-radius: 6px; padding: 0 6px; font-size: 13px; background: #fff; color: #1f2329; outline: none; }
+select.model:focus { border-color: var(--cg-primary); }
+.toggle { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #606266; cursor: pointer; user-select: none; }
+.toggle input { margin: 0; cursor: pointer; }
+
+.input-row { display: flex; gap: 6px; align-items: flex-end; }
+textarea.input { flex: 1; resize: none; border: 1px solid #dcdfe6; border-radius: 8px; padding: 7px 9px; font-size: 13px; line-height: 1.4; max-height: 120px; outline: none; font-family: inherit; color: #1f2329; background: #fff; }
+textarea.input:focus { border-color: var(--cg-primary); }
+button.send { height: 34px; padding: 0 14px; border: none; border-radius: 8px; background: var(--cg-primary); color: #fff; font-size: 13px; cursor: pointer; font-weight: 600; }
+button.send:hover { background: #2f8ae6; }
+button.send:disabled { background: #a0cfff; cursor: not-allowed; }
+
+.actions { display: flex; gap: 6px; margin-top: 6px; }
+.actions button { flex: 1; height: 26px; border: 1px solid #dcdfe6; background: #fff; color: #606266; border-radius: 6px; font-size: 12px; cursor: pointer; }
+.actions button:hover { border-color: var(--cg-primary); color: var(--cg-primary); }
+.actions button.danger { border-color: #f56c6c; color: #f56c6c; }
+.hidden { display: none !important; }
+
+.hint { font-size: 12px; color: #e6a23c; margin-top: 6px; min-height: 14px; }
+.cursor::after { content: "▋"; color: #909399; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }

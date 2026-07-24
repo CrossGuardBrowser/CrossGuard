@@ -68,6 +68,8 @@ CC_BASE_EXPORT extern const char kCCScrollAnimationDurationForTesting[];
 
 // CrossGuard custom switches.
 CC_BASE_EXPORT extern const char kApiKey[];
+CC_BASE_EXPORT extern const char kCrossGuardProfileId[];
+CC_BASE_EXPORT extern const char kCrossGuardLauncherPort[];
 
 }  // namespace switches
 

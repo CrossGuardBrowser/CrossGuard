@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>CrossGuard AI</title>
+  <link rel="stylesheet" href="chat.css?v=4">
+</head>
+<body>
+  <!-- launcher 注入 window.__CG__ = {profileId, launcherPort} -->
+  <div class="panel" id="panel">
+    <div class="header">
+      <span class="title">AI 对话</span>
+      <span class="env-badge" id="env-badge">环境 -</span>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="footer">
+      <div class="toolbar">
+        <select class="model" id="model"></select>
+        <label class="toggle" title="让 AI 调用工具操作当前浏览器(截图/点击/填表等)">
+          <input type="checkbox" id="agent"> Agent
+        </label>
+      </div>
+      <div class="input-row">
+        <textarea class="input" id="input" placeholder="输入问题,Ctrl+Enter 发送" rows="2"></textarea>
+        <button class="send" id="send">发送</button>
+      </div>
+      <div class="actions">
+        <button id="new">新对话</button>
+        <button id="stop" class="danger hidden">停止</button>
+      </div>
+      <div class="hint" id="hint"></div>
+    </div>
+  </div>
+  <script>window.__CG__ = { profileId: $i18nRaw{profileId}, launcherPort: $i18nRaw{launcherPort} };</script>
+  <script src="chat.js?v=4"></script>
+</body>
+</html>

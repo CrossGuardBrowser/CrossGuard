@@ -114,5 +114,7 @@ const char kCCScrollAnimationDurationForTesting[] =
 
 // CrossGuard custom switches.
 const char kApiKey[] = "api-key";
+const char kCrossGuardProfileId[] = "crossguard-profile-id";
+const char kCrossGuardLauncherPort[] = "crossguard-launcher-port";
 
 }  // namespace switches

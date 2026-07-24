@@ -1,0 +1,14 @@
+# Copyright 2026 CrossGuard. Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+import("//tools/grit/grit_rule.gni")
+
+# 传统 grit(支持纯 JS/HTML/CSS,不用 build_webui 的 TypeScript 强制)
+grit("crossguard_chat_resources") {
+  source = "crossguard_chat_resources.grd"
+  outputs = [
+    "grit/crossguard_chat_resources.h",
+    "crossguard_chat_resources.pak",
+  ]
+  output_dir = "$root_gen_dir/chrome"
+}

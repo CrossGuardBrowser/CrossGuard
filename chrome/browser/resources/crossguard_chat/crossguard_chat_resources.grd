@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grit latest_public_release="0" current_release="1">
+  <outputs>
+    <output filename="grit/crossguard_chat_resources.h" type="rc_header" />
+    <output filename="crossguard_chat_resources.pak" type="data_package" />
+  </outputs>
+  <release seq="1">
+    <includes>
+      <include name="IDR_CROSSGUARD_CHAT_CHAT_HTML" file="chat.html" type="BINDATA" />
+      <include name="IDR_CROSSGUARD_CHAT_CHAT_CSS" file="chat.css" type="BINDATA" />
+      <include name="IDR_CROSSGUARD_CHAT_CHAT_JS" file="chat.js" type="BINDATA" />
+    </includes>
+  </release>
+</grit>
