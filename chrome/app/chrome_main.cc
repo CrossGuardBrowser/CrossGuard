@@ -4,7 +4,6 @@
 
 #include <stdint.h>
 
-#include <algorithm>
 #include <iostream>
 #include <memory>
 
@@ -13,7 +12,6 @@
 #include "base/functional/bind.h"
 #include "base/functional/callback_helpers.h"
 #include "base/sampling_heap_profiler/poisson_allocation_sampler.h"
-#include "base/singleton_fingerprint.h"
 #include "base/time/time.h"
 #include "build/build_config.h"
 #include "chrome/app/chrome_main_delegate.h"
@@ -26,7 +24,6 @@
 #include "content/public/common/content_switches.h"
 #include "partition_alloc/buildflags.h"
 #include "fetch_http_response.h"
-#include "third_party/blink/public/common/fingerprint/fingerprint.h"
 
 #if BUILDFLAG(IS_MAC)
 #include "chrome/app/chrome_main_mac.h"
@@ -178,25 +175,6 @@ int ChromeMain(int argc, const char** argv) {
   FetchHttpResponse();
   [[maybe_unused]] base::CommandLine* command_line(
       base::CommandLine::ForCurrentProcess());
-
-  // CrossGuard: 根据指纹配置的语言注入 --lang（浏览器 UI locale），
-  // 使 navigator.language / Intl.* 与 Accept-Language 配置保持一致。
-  // 对应 fp_language.h 注释："在启动的时候 需要加上 --lang=en-US"。
-  base::SingletonFingerprint* sfp = base::SingletonFingerprint::ForCurrentProcess();
-  if (base::SingletonFingerprint::GetInit(sfp) &&
-      !command_line->HasSwitch(switches::kLang)) {
-    const blink::fp::Fingerprint& fpr = sfp->GetFingerprint();
-    if (fpr.language.type > 1) {
-      std::string ui_lang = fpr.language.interfaceLanguage;
-      if (ui_lang.empty() && !fpr.language.languages.empty()) {
-        ui_lang = fpr.language.languages.front();
-      }
-      if (!ui_lang.empty()) {
-        std::replace(ui_lang.begin(), ui_lang.end(), '_', '-');
-        command_line->AppendSwitchASCII(switches::kLang, ui_lang);
-      }
-    }
-  }
 
 #if BUILDFLAG(IS_WIN)
   if (base::CommandLine::ForCurrentProcess()->HasSwitch(
