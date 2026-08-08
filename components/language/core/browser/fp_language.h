@@ -5,7 +5,9 @@
 #include "base/singleton_fingerprint.h"
 
 inline void setLlanguage(PrefService* user_prefs) {
-    //在启动的时候  需要加上 --lang=en-US  t_fingerprint.interfaceLanguage
+    // --lang 已在 chrome_main.cc（FetchHttpResponse 之后）按 interfaceLanguage 注入，
+    // 此处仅同步 Accept-Language 偏好，影响 HTTP Accept-Language 头与
+    // navigator.languages 的后续条目（navigator.language 主值由 --lang 决定）。
     base::SingletonFingerprint* t_singletonFingerprint = base::SingletonFingerprint::ForCurrentProcess();
     blink::fp::Fingerprint  t_fingerprint = t_singletonFingerprint->GetFingerprint();
         if(base::SingletonFingerprint::GetInit(t_singletonFingerprint) && t_fingerprint.language.type>1){
