@@ -245,13 +245,23 @@ void BrowserActions::InitializeBrowserActions() {
                       IDS_READING_MODE_TITLE, kMenuBookChromeRefreshIcon,
                       kActionSidePanelShowReadAnything, browser, true)
           .Build());
-  // CrossGuard AI chat side panel action(必须注册,否则 PopulateSidePanel 的
-  // GetActionItem 返回 null → 解引用崩溃)。is_pinnable=false:不显示在 pinned
-  // toolbar(避免与 toolbar_view 的自定义 AI 按钮重复),仅注册供 side panel 系统识别。
+  // CrossGuard AI Agent side panel action(必须注册,否则 PopulateSidePanel 的
+  // GetActionItem 返回 null → 解引用崩溃)。标题/tooltip 固定"AI Agent":
+  // 不复用 IDS_READING_MODE_TITLE,否则与内置朗读模式(书本图标)同名且
+  // 与星芒图标不匹配。pinnable=true:取消固定后仍可从 ⋮ 更多工具进入。
   root_action_item_->AddChild(
-      SidePanelAction(SidePanelEntryId::kCrossGuardChat, IDS_READING_MODE_TITLE,
-                      IDS_READING_MODE_TITLE, vector_icons::kChatSparkIcon,
-                      kActionSidePanelShowCrossGuardChat, browser, false)
+      actions::ActionItem::Builder(CreateToggleSidePanelActionCallback(
+                                       SidePanelEntryKey(
+                                           SidePanelEntryId::kCrossGuardChat),
+                                       browser))
+          .SetActionId(kActionSidePanelShowCrossGuardChat)
+          .SetText(u"AI Agent")
+          .SetTooltipText(u"AI Agent")
+          .SetImage(ui::ImageModel::FromVectorIcon(
+              vector_icons::kChatSparkIcon, ui::kColorIcon))
+          .SetProperty(actions::kActionItemPinnableKey,
+                       std::underlying_type_t<actions::ActionPinnableState>(
+                           actions::ActionPinnableState::kPinnable))
           .Build());
 
   if (lens::features::IsLensOverlayEnabled()) {
