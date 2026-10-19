@@ -10,7 +10,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Chromium-138.0.7204.50-blue" alt="Chromium Version">
-  <img src="https://img.shields.io/badge/Version-2.3.16-brightgreen" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.4.5-brightgreen" alt="Version">
   <img src="https://img.shields.io/badge/Platform-Windows-green" alt="Platform">
   <img src="https://img.shields.io/badge/License-GPL-orange" alt="License">
   <img src="https://img.shields.io/badge/MCP-AI%20Automation-purple" alt="MCP">
@@ -44,7 +44,8 @@
 - **云端同步** — 独立后端服务，多机同步环境（推送 / 拉取书签与浏览历史、上传完整环境快照）
 - **Material-3 管理界面** — 全新 Tailwind + Material Design 3 风格 Web UI，本地构建、离线可用、零外部依赖
 - **常驻系统托盘** — 启动即驻留系统托盘，关闭主窗口最小化到托盘后台运行，右键托盘一键退出并关闭所有环境进程
-- **AI 对话 + Agent** — 每个环境浏览器内置 AI 助手（右上角按钮 + 右侧面板）；**Agent 模式**下 LLM 经 function-calling 调用工具实际控制当前浏览器（截图 / 导航 / 点击 / 填表 / 提取数据 / 执行 JS），截图可喂 vision 模型分析；支持配置多个 OpenAI 兼容模型（Kimi / GLM / DeepSeek / 通义 / OpenAI / Ollama），API Key 加密存储于本机、永不下发
+- **开机自启动** — 随 Windows 登录自动以后台服务模式运行（仅托盘，不弹窗口），本地管理服务 `127.0.0.1:18900` 重启后即刻可用；卸载时自动清除自启动项
+- **AI Agent** — 每个环境浏览器内置 AI Agent 侧边栏（工具栏图标，或菜单「更多工具 → AI Agent」打开）；**Agent 模式**下 LLM 经 function-calling 调用 **18 个工具**实际控制当前浏览器（截图 / 导航 / 点击 / 填表 / 提取数据 / 执行 JS / DOM 检查 / 滚动 / 按键等），截图可喂 vision 模型分析；支持配置多个 OpenAI 兼容模型（Kimi / GLM / DeepSeek / 通义 / OpenAI / Ollama），API Key 加密存储于本机、永不下发
 
 ## 截图
 
