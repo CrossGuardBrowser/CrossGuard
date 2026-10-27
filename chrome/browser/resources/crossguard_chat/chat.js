@@ -22,13 +22,25 @@
     { type: "function", function: { name: "hover", description: "鼠标悬停到CSS选择器元素上(触发hover效果/下拉菜单)。", parameters: { type: "object", properties: { selector: { type: "string" } }, required: ["selector"] } } },
     { type: "function", function: { name: "select", description: "选择下拉框(<select>)的选项: selector=下拉框CSS选择器, value=选项value。", parameters: { type: "object", properties: { selector: { type: "string" }, value: { type: "string" } }, required: ["selector", "value"] } } },
     { type: "function", function: { name: "get_html", description: "获取CSS选择器元素的outerHTML(完整HTML结构),用于分析元素属性/结构。", parameters: { type: "object", properties: { selector: { type: "string" } }, required: ["selector"] } } },
-    { type: "function", function: { name: "press_key", description: "在页面按键盘按键(key=Enter/Escape/Tab/ArrowDown等),用于确认/取消/导航。", parameters: { type: "object", properties: { key: { type: "string" } }, required: ["key"] } } },
-    { type: "function", function: { name: "switch_tab", description: "切换/回到标签页: index=0回到第1个tab(首页), url=URL关键词匹配, full_url=完整URL。通过导航实现(会重新加载)。", parameters: { type: "object", properties: { index: { type: "number" }, url: { type: "string" }, full_url: { type: "string" } } } } },
+    { type: "function", function: { name: "press_key", description: "在页面按键盘按键(key=Enter/Escape/Tab/ArrowDown等,或单字符),modifiers=[\"ctrl\",\"shift\",\"alt\"]组合键。", parameters: { type: "object", properties: { key: { type: "string" }, modifiers: { type: "array", items: { type: "string" } } }, required: ["key"] } } },
+    { type: "function", function: { name: "switch_tab", description: "真正切换到指定标签页(置前显示,之后的操作都作用于它): index=序号, url=URL关键词, full_url=完整URL。先用 list_tabs 查看所有标签页。", parameters: { type: "object", properties: { index: { type: "number" }, url: { type: "string" }, full_url: { type: "string" } } } } },
+    { type: "function", function: { name: "list_tabs", description: "列出当前环境所有标签页(index/标题/URL/是否当前锁定)。需要多页面操作或切换前先调用。", parameters: { type: "object", properties: {} } } },
+    { type: "function", function: { name: "close_tab", description: "关闭指定标签页(index/url/full_url 三选一定位)。最后一个标签页会被拒绝关闭。", parameters: { type: "object", properties: { index: { type: "number" }, url: { type: "string" }, full_url: { type: "string" } } } } },
     { type: "function", function: { name: "extract_table", description: "提取页面表格为JSON二维数组(行列)。selector=table选择器(默认table)。用于数据采集(如提取商品列表/价格表)。", parameters: { type: "object", properties: { selector: { type: "string" } } } } },
-    { type: "function", function: { name: "new_tab", description: "新开标签页并导航到URL。用于需要多页面操作(如同时看两个网站)。", parameters: { type: "object", properties: { url: { type: "string" } }, required: ["url"] } } },
+    { type: "function", function: { name: "new_tab", description: "新开标签页并导航到URL(新标签页自动激活,之后操作都作用于它)。", parameters: { type: "object", properties: { url: { type: "string" } }, required: ["url"] } } },
     { type: "function", function: { name: "run_js", description: "在页面执行任意 JavaScript(函数体,可 return 值)。慎用:在用户登录态下运行", parameters: { type: "object", properties: { code: { type: "string" } }, required: ["code"] } } },
+    { type: "function", function: { name: "get_page_markdown", description: "把当前页面转换为 Markdown 文档(保留标题/链接/图片/列表/表格/代码块结构)。比纯文本更适合文档化/存档。", parameters: { type: "object", properties: {} } } },
+    { type: "function", function: { name: "save_screenshot", description: "截图保存为图片文件(.png/.jpg)。full=true截整页。文件保存在本环境的 agent_files 目录,返回绝对路径。用户说'截图保存/把页面截下来存文件'时用此工具而非 screenshot。", parameters: { type: "object", properties: { filename: { type: "string" }, full: { type: "boolean" } } } } },
+    { type: "function", function: { name: "export_pdf", description: "把当前页面导出为 PDF 文件(可调 landscape横向/print_background背景)。用户说'导出PDF/存成PDF/打印页面'时调用。", parameters: { type: "object", properties: { filename: { type: "string" }, landscape: { type: "boolean" }, print_background: { type: "boolean" } } } } },
+    { type: "function", function: { name: "save_page", description: "把当前页面导出为文档文件。format: markdown|html|text。用户说'保存网页/存档这个页面/导出页面内容'时调用。", parameters: { type: "object", properties: { filename: { type: "string" }, format: { type: "string", enum: ["markdown", "html", "text"] } } } } },
+    { type: "function", function: { name: "save_table", description: "提取页面表格并保存为文件。format: csv(Excel可直接打开)|json|md。用户说'把表格存下来/导出表格'时调用。", parameters: { type: "object", properties: { selector: { type: "string" }, filename: { type: "string" }, format: { type: "string", enum: ["csv", "json", "md"] } } } } },
+    { type: "function", function: { name: "save_file", description: "生成/保存文本文件(报告.md/数据.json/笔记.txt/代码.html等,按内容生成各类文件)。filename含扩展名,返回保存的绝对路径。用户说'保存/生成/写一个XX文件'时调用。", parameters: { type: "object", properties: { filename: { type: "string" }, content: { type: "string" } }, required: ["filename", "content"] } } },
+    { type: "function", function: { name: "download_file", description: "在当前页面登录态+代理下下载 URL 资源(图片/PDF/文件,≤32MB)保存到本环境目录。用户说'下载这个图片/文件/资源'时调用。", parameters: { type: "object", properties: { url: { type: "string" }, filename: { type: "string" } }, required: ["url"] } } },
+    { type: "function", function: { name: "read_file", description: "读取之前生成的文本文件内容(如继续编辑报告/查看已保存数据)。filename=list_files返回的文件名。", parameters: { type: "object", properties: { filename: { type: "string" } }, required: ["filename"] } } },
+    { type: "function", function: { name: "list_files", description: "列出本环境 agent_files 目录所有已生成文件(名称/大小/时间)。用户问'生成了哪些文件/文件在哪'时调用。", parameters: { type: "object", properties: {} } } },
+    { type: "function", function: { name: "delete_file", description: "删除本环境 agent_files 目录中的文件。", parameters: { type: "object", properties: { filename: { type: "string" } }, required: ["filename"] } } },
   ];
-  const AGENT_SYSTEM_PROMPT = "你是 CrossGuard 浏览器助手,运行在用户的环境浏览器内。你具备真实操作浏览器的能力——通过提供的工具(get_page_text/screenshot/navigate/click/fill/extract/run_js)可以抓取页面文本、截图、跳转、点击、填表、提取、执行 JS。工具真实有效,你能真正控制浏览器。\n\n工具选择规则:\n- '总结/分析/阅读当前页面内容'→**必须**调用 get_page_text(获取 DOM 文本,速度快、内容全、精度高)\n- '找元素/定位元素/页面有哪些按钮或输入框/分析页面结构'→**优先**调用 inspect_dom(精确拿选择器,不靠截图视觉)\n- '点击/填表'(需选择器)→**先** inspect_dom 拿到 sel,**再** click/fill\n- '截图/看看页面长什么样/页面布局'→调用 screenshot\n- '打开XX/跳转到XX/导航到XX'→调用 navigate\n- '搜索XX/查找XX/搜XX'→**必须在左侧tab操作**(不是AI对话框内): 先 navigate 到搜索页(如百度首页)→wait 等加载→inspect_dom 找搜索框→fill→click 搜索按钮→wait 结果→get_page_text 总结搜索结果\n- '提取/执行脚本'→相应工具\n\n- '悬停/鼠标移到XX'→调用 hover(selector=元素)\n- '选择下拉框/选XX选项'→调用 select(selector=下拉框,value=选项值)\n- '按键/回车/按Enter/Escape/Tab'→调用 press_key(key=按键名)\n- '看XX元素的HTML/结构'→调用 get_html(selector=元素)\n- '下拉/滚动到底部/翻页/滚动到顶部/移到XX元素'→调用 scroll(selector=元素/to=bottom|top)\n- '等待页面加载/等元素出现/稍等'→调用 wait\n\n流程:调工具 → 看结果 → 基于结果回复。所有操作在左侧tab进行(非AI对话框)。";
+  const AGENT_SYSTEM_PROMPT = "你是 CrossGuard 浏览器助手,运行在用户的环境浏览器内。你具备真实操作浏览器的能力——通过提供的工具(get_page_text/screenshot/navigate/click/fill/extract/run_js)可以抓取页面文本、截图、跳转、点击、填表、提取、执行 JS。工具真实有效,你能真正控制浏览器。\n\n工具选择规则:\n- '总结/分析/阅读当前页面内容'→**必须**调用 get_page_text(获取 DOM 文本,速度快、内容全、精度高)\n- '找元素/定位元素/页面有哪些按钮或输入框/分析页面结构'→**优先**调用 inspect_dom(精确拿选择器,不靠截图视觉)\n- '点击/填表'(需选择器)→**先** inspect_dom 拿到 sel,**再** click/fill\n- '截图/看看页面长什么样/页面布局'→调用 screenshot\n- '打开XX/跳转到XX/导航到XX'→调用 navigate\n- '搜索XX/查找XX/搜XX'→**必须在左侧tab操作**(不是AI对话框内): 先 navigate 到搜索页(如百度首页)→wait 等加载→inspect_dom 找搜索框→fill→click 搜索按钮→wait 结果→get_page_text 总结搜索结果\n- '提取/执行脚本'→相应工具\n\n- '悬停/鼠标移到XX'→调用 hover(selector=元素)\n- '选择下拉框/选XX选项'→调用 select(selector=下拉框,value=选项值)\n- '按键/回车/按Enter/Escape/Tab/组合键'→调用 press_key(key=按键名)\n- '看XX元素的HTML/结构'→调用 get_html(selector=元素)\n- '下拉/滚动到底部/翻页/滚动到顶部/移到XX元素'→调用 scroll(selector=元素/to=bottom|top)\n- '等待页面加载/等元素出现/稍等'→调用 wait\n- '多个标签页/切换到XX页/第几个tab'→list_tabs 查看后 switch_tab 切换(真正置前,后续操作作用于它);新开页面用 new_tab\n\n文档与文件生成规则(生成结果保存在本环境 agent_files 目录,工具返回绝对路径):\n- '页面导出PDF/存成PDF/打印'→export_pdf\n- '保存网页/存档页面/导出页面'→save_page(format: markdown适合阅读存档/html保真/text纯文本)\n- '把表格存下来/导出表格'→save_table(format: csv兼容Excel/json/md)\n- '截图保存成文件/长截图保存'→save_screenshot(而非 screenshot)\n- '下载页面里的图片/文件/资源'→download_file(url 来自页面,走登录态+代理)\n- '生成报告/写文档/保存笔记/写代码文件'→save_file(filename 含扩展名,如 报告.md/数据.json)\n- '接着改之前的文件/看看存了什么'→list_files / read_file\n- 生成文件后,把**绝对路径**告诉用户,方便用户查看\n- 需要 Markdown 结构化内容(而非纯文本)时可用 get_page_markdown\n\n流程:调工具 → 看结果 → 基于结果回复。所有操作在左侧tab进行(非AI对话框)。";
 
   const state = {
     models: [], modelId: null, messages: [],
@@ -102,7 +114,7 @@
   function renderMessages() {
     const box = els.messages;
     if (!state.messages.length) {
-      box.innerHTML = '<div class="empty">输入问题开始对话<br>开启「Agent」可让 AI 操作当前页面(截图/搜索/填表)</div>'; return;
+      box.innerHTML = '<div class="empty">输入问题开始对话<br>开启「Agent」可让 AI 操作当前页面(截图/搜索/填表)<br>并生成各类文件(报告/PDF/表格/图片下载)</div>'; return;
     }
     box.innerHTML = ""; const last = state.messages[state.messages.length - 1];
     for (const msg of state.messages) {
@@ -123,7 +135,7 @@
           if (!tc || !tc.name) continue;
           const card = mk("div", "tool-step" + (tc.name === "run_js" ? " tool-warn" : ""));
           let args = tc.arguments || ""; try { args = JSON.stringify(JSON.parse(tc.arguments), null, 2); } catch (e) {}
-          const icons = {screenshot:"📷",screenshot_full:"📷⬇",get_page_text:"📄",inspect_dom:"🔍",navigate:"🧭",click:"👆",fill:"⌨️",extract:"📊",run_js:"⚡",scroll:"📜",wait:"⏳",hover:"🖱️",select:"📋",get_html:"🏗️",press_key:"⌨️"};
+          const icons = {screenshot:"📷",screenshot_full:"📷⬇",get_page_text:"📄",inspect_dom:"🔍",navigate:"🧭",click:"👆",fill:"⌨️",extract:"📊",run_js:"⚡",scroll:"📜",wait:"⏳",hover:"🖱️",select:"📋",get_html:"🏗️",press_key:"⌨️",switch_tab:"🔀",list_tabs:"🗂️",close_tab:"❌",new_tab:"➕",extract_table:"📊",get_page_markdown:"📝",save_screenshot:"🖼️",export_pdf:"📄✅",save_page:"💾",save_table:"📊✅",save_file:"📝✅",download_file:"⬇️",read_file:"📂",list_files:"📁",delete_file:"🗑️"};
           const icon = icons[tc.name] || "🔧";
           card.innerHTML = `<span class="step-icon">${icon}</span><b>${escapeHtml(tc.name)}</b>`;
           if (args && args !== "{}") card.innerHTML += ` <code>${escapeHtml(args.length > 80 ? args.slice(0,80)+"…" : args)}</code>`;
@@ -218,6 +230,7 @@
   }
 
   // ── 单轮流式:fetch + ReadableStream 解析 SSE(原 bg2.js 逻辑,搬回前端)──
+  // 超时保护:连接 45s 拿不到响应头 / 流 90s 无数据 / 总时长 5min,均中断并报错,防止对话永久卡死
   function streamOnce(payload, round) {
     return new Promise((resolve) => {
       const assistantMsg = { role: "assistant", content: "", tool_calls: [] };
@@ -225,18 +238,48 @@
       const reqBody = { modelId: state.modelId, messages: payload };
       if (state.agentMode) { reqBody.tools = AGENT_TOOLS; reqBody.tool_choice = (round === 1 ? "required" : "auto"); }
       let aborted = false;
-      const finish = () => { aborted = true; resolve(assistantMsg); };
+      const finish = (errText) => {
+        if (aborted) return;
+        aborted = true;
+        if (errText) assistantMsg.content += (assistantMsg.content ? "\n\n" : "") + errText;
+        renderMessages();
+        resolve(assistantMsg);
+      };
       (async () => {
+        // 本地中断控制:stop 按钮 / 超时都 abort 它(fetch 与 body 读取共用)
+        const ctrl = new AbortController();
+        const abortCtrl = () => { try { ctrl.abort(); } catch (e) {} };
+        if (state.streamCtrl) {
+          if (state.streamCtrl.signal.aborted) abortCtrl();
+          else state.streamCtrl.signal.addEventListener("abort", abortCtrl);
+        }
         try {
-          const res = await fetch(`${BASE}/api/chat/completions`, {
-            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(reqBody),
-            signal: state.streamCtrl ? state.streamCtrl.signal : undefined,
-          });
-          if (!res.ok) { assistantMsg.content = `[错误] launcher HTTP ${res.status}`; renderMessages(); finish(); return; }
+          const connTimer = setTimeout(abortCtrl, 45000);
+          let res;
+          try {
+            res = await fetch(`${BASE}/api/chat/completions`, {
+              method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(reqBody),
+              signal: ctrl.signal,
+            });
+          } finally { clearTimeout(connTimer); }
+          if (!res.ok) { finish(`[错误] launcher HTTP ${res.status}`); return; }
           const reader = res.body.getReader(); const dec = new TextDecoder(); let buf = "";
+          const IDLE_MS = 90000, TOTAL_MS = 300000; const t0 = Date.now();
+          let idleTimer = null;
+          const clearIdle = () => { if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; } };
+          const readWithIdle = () => new Promise((res2) => {
+            idleTimer = setTimeout(() => { clearIdle(); res2({ idleTimeout: true }); }, IDLE_MS);
+            reader.read().then(
+              (r) => { clearIdle(); res2(r); },
+              (e) => { clearIdle(); res2({ readErr: e }); });
+          });
           while (true) {
-            if (state.aborted) { reader.cancel(); finish(); return; }
-            const { value, done } = await reader.read(); if (done) break;
+            if (state.aborted) { try { reader.cancel(); } catch (e) {} finish(); return; }
+            const { value, done, idleTimeout, readErr } = await readWithIdle();
+            if (idleTimeout) { try { reader.cancel(); } catch (e) {} finish("[错误] 模型响应超时(90 秒无数据,已中断)"); return; }
+            if (Date.now() - t0 > TOTAL_MS) { try { reader.cancel(); } catch (e) {} finish("[错误] 响应总时长超过 5 分钟,已中断"); return; }
+            if (readErr) throw readErr;
+            if (done) break;
             buf += dec.decode(value, { stream: true });
             let idx;
             while ((idx = buf.indexOf("\n\n")) >= 0) {
@@ -264,7 +307,11 @@
             }
           }
           finish();
-        } catch (e) { assistantMsg.content = `[错误] ${e}`; renderMessages(); finish(); }
+        } catch (e) {
+          // 用户主动停止:不往气泡里追加 AbortError 之类的报错
+          if (state.aborted) { finish(); return; }
+          finish(`[错误] ${e && e.message ? e.message : e}`);
+        }
       })();
     });
   }
@@ -334,7 +381,13 @@
       clearTimeout(t);
       resp = await r.json();
     } catch (e) { resp = { _err: e.name === 'AbortError' ? '工具超时(20s)' : String(e) }; }
-    if (resp && resp.ok) return { kind: "text", content: truncate(JSON.stringify({ log: resp.log, outputs: resp.outputs }), 8192) };
+    if (resp && resp.ok) {
+      // 内容类工具直接返回 outputs.value(大内容,32000字符)
+      const o = resp.outputs || {};
+      if ((tc.name === "get_page_markdown" || tc.name === "read_file" || tc.name === "get_page_text") && typeof o.value === "string")
+        return { kind: "text", content: o.value ? truncate(o.value, 32000) : "(无内容)" };
+      return { kind: "text", content: truncate(JSON.stringify({ log: resp.log, outputs: resp.outputs }), 8192) };
+    }
     return { kind: "text", content: "[工具失败] " + ((resp && (resp.error || resp._err)) || "未知") };
   }
 
@@ -343,24 +396,32 @@
     state.streaming = true; state.aborted = false; state.streamCtrl = new AbortController();
     els.send.disabled = true; els.stop.classList.remove("hidden");
     const MAX = 8; let round = 0;
-    while (round < MAX && !state.aborted) {
-      round++;
-      const payload = buildPayload(); const asst = await streamOnce(payload, round);
-      if (state.aborted) break;
-      const tcs = (asst.tool_calls || []).filter(t => t && t.name);
-      if (!tcs.length) break;
-      for (const tc of tcs) {
+    try {
+      while (round < MAX && !state.aborted) {
+        round++;
+        const payload = buildPayload(); const asst = await streamOnce(payload, round);
         if (state.aborted) break;
-        const r = await execTool(tc);
-        state.messages.push({ role: "tool", tool_call_id: tc.id, name: tc.name, content: r.content });
-        if (r.kind === "screenshot" && r.image)
-          state.messages.push({ role: "user", content: [{ type: "text", text: "📸 screenshot 结果:" }, { type: "image_url", image_url: { url: r.image } }] });
-        renderMessages();
+        const tcs = (asst.tool_calls || []).filter(t => t && t.name);
+        if (!tcs.length) break;
+        for (const tc of tcs) {
+          if (state.aborted) break;
+          const r = await execTool(tc);
+          state.messages.push({ role: "tool", tool_call_id: tc.id, name: tc.name, content: r.content });
+          if (r.kind === "screenshot" && r.image)
+            state.messages.push({ role: "user", content: [{ type: "text", text: "📸 screenshot 结果:" }, { type: "image_url", image_url: { url: r.image } }] });
+          renderMessages();
+        }
       }
+      if (round >= MAX && !state.aborted) state.messages.push({ role: "assistant", content: "(已达 Agent 最大轮数 8,停止。)" });
+    } catch (e) {
+      // 任何异常都落成一条错误消息,不让 UI 永久锁在 streaming 状态
+      state.messages.push({ role: "assistant", content: "[异常] " + (e && e.message ? e.message : String(e)) });
+    } finally {
+      state.streaming = false; state.streamCtrl = null;
+      els.send.disabled = false; els.stop.classList.add("hidden");
+      setHint("");
+      renderMessages(); saveState();
     }
-    if (round >= MAX && !state.aborted) state.messages.push({ role: "assistant", content: "(已达 Agent 最大轮数 8,停止。)" });
-    state.streaming = false; els.send.disabled = false; els.stop.classList.add("hidden");
-    renderMessages(); saveState();
   }
 
   function send() {
