@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrossGuard — 开源指纹浏览器 | 多环境隔离 · 自洽指纹 · MCP / RPA 自动化</title>
+  <meta name="description" content="CrossGuard 是一款基于 Chromium 138 的开源指纹浏览器。UA 与 Client Hints 对齐内核版本，语言在启动前按代理出口写好，Canvas / WebGL 噪音按环境固定。内置 36 个 MCP 工具、RPA 与云端环境同步。" />
+  <meta name="keywords" content="CrossGuard,指纹浏览器,开源,反检测,Anti-Detect,Chromium,MCP,多开,指纹伪装" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="CrossGuard — 开源指纹浏览器" />
+  <meta property="og:description" content="基于 Chromium 138 · 多环境隔离 · UA 与 Client Hints 自洽 · 36 个 MCP 工具" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://github.com/sunny5156/CrossGuard" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- ===== Progress bar ===== -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ===== Navbar ===== -->
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#hero" class="brand" aria-label="CrossGuard">
+        <span class="brand-logo">
+          <svg viewBox="0 0 32 32" width="30" height="30" fill="none" aria-hidden="true">
+            <path d="M16 2 4 7v8c0 8 5 12 12 15 7-3 12-7 12-15V7L16 2Z" fill="url(#g1)" opacity="0.25"/>
+            <path d="M16 2 4 7v8c0 8 5 12 12 15 7-3 12-7 12-15V7L16 2Z" stroke="url(#g1)" stroke-width="1.6"/>
+            <path d="M11 16.5l3.2 3.2L21 13" stroke="url(#g1)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs><linearGradient id="g1" x1="4" y1="2" x2="28" y2="30"><stop stop-color="#22d3ee"/><stop offset=".5" stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+          </svg>
+        </span>
+        <span class="brand-name">CrossGuard</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#features" class="nav-link">核心特性</a>
+        <a href="#fingerprint" class="nav-link">指纹参数</a>
+        <a href="#mcp" class="nav-link">MCP 自动化</a>
+        <a href="#releases" class="nav-link">版本更新</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="https://github.com/sunny5156/CrossGuard" class="nav-link nav-github" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+          GitHub
+        </a>
+        <a href="https://github.com/sunny5156/CrossGuard/releases/latest" class="btn btn-primary nav-cta" target="_blank" rel="noopener">立即下载</a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="菜单" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="grid-overlay"></div>
+      <div class="glow glow-1"></div>
+      <div class="glow glow-2"></div>
+      <div class="glow glow-3"></div>
+    </div>
+    <div class="container hero-inner">
+      <span class="badge reveal">
+        <span class="dot"></span> 开源 · 基于 Chromium 138 · v2.4.7
+      </span>
+      <h1 class="hero-title reveal">
+        <span class="gradient-text">CrossGuard</span><br />
+        开源指纹浏览器
+      </h1>
+      <p class="hero-sub reveal">
+        多环境隔离 · 与内核版本对齐的指纹 · 36 个 MCP 工具 · RPA · 云端同步。<br />
+        每个环境一套稳定身份：UA、Client Hints、语言和像素噪音在同一次启动里保持一致。
+      </p>
+      <div class="hero-cta reveal">
+        <a href="https://github.com/sunny5156/CrossGuard/releases/latest" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          立即下载
+        </a>
+        <a href="https://github.com/sunny5156/CrossGuard" class="btn btn-ghost btn-lg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          查看源码
+        </a>
+      </div>
+
+      <div class="hero-stats reveal">
+        <div class="stat"><div class="stat-num" data-target="138">0</div><div class="stat-label">Chromium 内核</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-num" data-target="25" data-suffix="+">0</div><div class="stat-label">指纹维度</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-num" data-target="36">0</div><div class="stat-label">MCP 工具</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-num" data-target="100" data-suffix="%">0</div><div class="stat-label">开源免费</div></div>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <span></span>
+    </div>
+  </section>
+
+  <!-- ===== Features ===== -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">核心特性</span>
+        <h2 class="section-title">为多账号运营而生的完整工具链</h2>
+        <p class="section-desc">从环境隔离到指纹伪装，从代理到 AI 自动化，CrossGuard 覆盖指纹浏览器的每一个关键环节。</p>
+      </div>
+
+      <div class="features-grid">
+        <article class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <h3>多环境隔离</h3>
+          <p>每个环境拥有独立的用户数据目录与 Cookie/缓存，环境之间完全隔离、互不干扰，无限多开。</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3>全维度指纹伪装</h3>
+          <p>UA 字符串使用 138.0.0.0，Client Hints 的完整版本与 GREASE 品牌对齐 Chromium 138。Win10 与 Win11 共用这条 UA，区别只在 platformVersion。</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg>
+          </div>
+          <h3>代理与 DNS 防泄露</h3>
+          <p>支持 HTTP / HTTPS / SOCKS4 / SOCKS5 代理，内置 DNS 防泄露与 Host 解析规则，杜绝 IP 与 DNS 真实身份外泄。</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg>
+          </div>
+          <h3>Cookie 注入</h3>
+          <p>通过 CDP 注入 Cookie（兼容 EditThisCookie 格式），一键导入会话，无需重新登录。</p>
+        </article>
+
+        <article class="feature-card reveal highlight">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1.5"/></svg>
+          </div>
+          <span class="card-tag">NEW</span>
+          <h3>MCP AI 自动化</h3>
+          <p>36 个 MCP 工具覆盖环境、页面读取、点击填写、标签页和文件导出。侧栏可接入 OpenAI 兼容模型，密钥留在本机。</p>
+        </article>
+
+        <article class="feature-card reveal highlight">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+          </div>
+          <span class="card-tag">NEW</span>
+          <h3>云端环境同步</h3>
+          <p>搭配 CrossGuardServer，同一账号多主机保持环境一致，书签与浏览历史云端同步，随时切换设备。</p>
+        </article>
+
+        <article class="feature-card reveal highlight">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <span class="card-tag">NEW</span>
+          <h3>RPA 流程</h3>
+          <p>32 种步骤：导航、点击、提取、条件、循环、文件与 Webhook。支持手动运行、每天定时、间隔执行，以及把页面操作录成步骤。</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3>扩展与插件</h3>
+          <p>从本地包或 Chrome / Edge 商店安装扩展，按环境勾选加载。每个环境仍使用独立的用户数据目录。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Fingerprint params ===== -->
+  <section class="section section-alt" id="fingerprint">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">指纹参数</span>
+        <h2 class="section-title">指纹与内核版本对齐</h2>
+        <p class="section-desc">UA、Client Hints、语言和像素噪音在同一次启动里使用同一套结果。代理出口的地理信息会在 Chrome 进程起来之前查好。</p>
+      </div>
+
+      <div class="fp-grid">
+        <div class="fp-item reveal"><span class="fp-ico">🌐</span><div><strong>User-Agent</strong><span>字符串冻结为 138.0.0.0</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">💻</span><div><strong>平台</strong><span>Win10 / Win11；Win7、Win8 按 Win10 输出</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🔣</span><div><strong>Client Hints</strong><span>GREASE 随主版本，完整版本 138.0.7204.50</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🗣️</span><div><strong>语言</strong><span>启动前同时写入 --lang 与 --accept-lang</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🕐</span><div><strong>时区</strong><span>可跟随代理出口 IP</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🎥</span><div><strong>WebRTC</strong><span>有代理时默认禁用非代理 UDP</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">📍</span><div><strong>地理位置</strong><span>跟随出口坐标，或手动指定</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🖥️</span><div><strong>分辨率</strong><span>窗口与屏幕尺寸</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🔤</span><div><strong>字体</strong><span>列表可保存；内核仍使用本机字体</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🎨</span><div><strong>Canvas</strong><span>噪音模式写入稳定像素偏移</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🧩</span><div><strong>WebGL</strong><span>噪音同时作用于 WebGL 与 GPU 读回</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🎵</span><div><strong>AudioContext</strong><span>按环境固定的音频噪声</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">📷</span><div><strong>媒体设备</strong><span>设备列表</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">📐</span><div><strong>ClientRects</strong><span>噪音为 0 时自动补稳定偏移</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🗣️</span><div><strong>Speech Voices</strong><span>语音合成列表</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">⚡</span><div><strong>CPU / 内存</strong><span>核心数与内存</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🛡️</span><div><strong>Do Not Track</strong><span>按开关下发</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🤖</span><div><strong>端口保护</strong><span>对应 openPort 配置</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🍪</span><div><strong>Cookie</strong><span>启动后经 CDP 注入</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🏷️</span><div><strong>设备名</strong><span>主机名</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🔗</span><div><strong>MAC 地址</strong><span>可自动生成</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🔒</span><div><strong>SSL / TLS</strong><span>预设握手指纹</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">⚙️</span><div><strong>硬件加速</strong><span>关闭时使用 SwiftShader</span></div></div>
+        <div class="fp-item reveal"><span class="fp-ico">🚫</span><div><strong>DNS 防泄露</strong><span>DoH、QUIC 与本地解析限制</span></div></div>
+      </div>
+      <p class="mcp-note reveal" style="margin-top:22px">Win10 的 platformVersion 为 10.0.19045，Win11 为 10.0.22631。Chrome 138 不能运行在 Windows 7 / 8 上，选择这两项会输出与 Win10 相同的 UA 和 Client Hints。同一环境的 Canvas、WebGL、音频和 ClientRects 噪音在多次读回中保持不变。</p>
+    </div>
+  </section>
+
+  <!-- ===== MCP ===== -->
+  <section class="section" id="mcp">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">🤖 MCP AI 自动化</span>
+        <h2 class="section-title">36 个工具，覆盖读页面、操作和导出</h2>
+        <p class="section-desc">MCP 与浏览器侧栏共用同一套动作。文件落在安装目录的 agent_files 下，按环境分开。</p>
+      </div>
+
+      <div class="mcp-layout">
+        <div class="mcp-left reveal">
+          <div class="mcp-tools">
+            <div class="mcp-tool-group">
+              <h4>环境管理（5）</h4>
+              <div class="chips">
+                <span class="chip">列出环境</span>
+                <span class="chip">环境详情</span>
+                <span class="chip">启动</span>
+                <span class="chip">关闭</span>
+                <span class="chip">运行中列表</span>
+              </div>
+            </div>
+            <div class="mcp-tool-group">
+              <h4>页面读取与操作（18）</h4>
+              <div class="chips">
+                <span class="chip">导航</span>
+                <span class="chip">文本 / Markdown</span>
+                <span class="chip">DOM / HTML</span>
+                <span class="chip">执行脚本</span>
+                <span class="chip">截图</span>
+                <span class="chip">Cookie 读写</span>
+                <span class="chip">点击 / 填写 / 选择</span>
+                <span class="chip">悬停 / 按键 / 滚动</span>
+                <span class="chip">等待 / 提取 / 表格</span>
+              </div>
+            </div>
+            <div class="mcp-tool-group">
+              <h4>标签页与文件（13）</h4>
+              <div class="chips">
+                <span class="chip">列出 / 新建 / 激活 / 关闭</span>
+                <span class="chip">截图文件 / PDF</span>
+                <span class="chip">保存页面 / 表格</span>
+                <span class="chip">读写与下载文件</span>
+              </div>
+            </div>
+          </div>
+          <div class="mcp-note">
+            <strong>端口约定：</strong>
+            Launcher <code>18900</code> · MCP <code>18901</code> · 每环境 CDP <code>19200 + 环境ID</code>
+          </div>
+        </div>
+
+        <div class="mcp-right reveal">
+          <div class="code-card">
+            <div class="code-head">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-name">.mcp.json</span>
+            </div>
+<pre class="code-body"><code>{
+  "mcpServers": {
+    "crossguard": {
+      "url": "http://127.0.0.1:18901/mcp",
+      "transport": "http",
+      "headers": {
+        "Authorization": "Bearer &lt;你的 Token&gt;"
+      }
+    }
+  }
+}</code></pre>
+          </div>
+          <p class="mcp-caption">在支持 MCP 的客户端（Claude Code / Cursor 等）中配置后，即可用自然语言驱动浏览器：</p>
+          <div class="mcp-flow">
+            <span class="flow-step">「打开环境并读页面」</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">「点击并提取表格」</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">「把结果存成文件」</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Releases ===== -->
+  <section class="section section-alt" id="releases">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">版本更新</span>
+        <h2 class="section-title">持续迭代，越来越好用</h2>
+        <p class="section-desc">完全开源，所有版本与源码托管在 GitHub。</p>
+      </div>
+
+      <div class="timeline">
+        <div class="release reveal latest">
+          <div class="release-meta">
+            <span class="ver">v2.4.7</span>
+            <span class="tag-latest">Latest</span>
+            <span class="date">2026-11-09</span>
+          </div>
+          <ul class="release-notes">
+            <li>启动前同步查询代理出口，--lang 与 --accept-lang 和随后下发的指纹使用同一次地理结果</li>
+            <li>Client Hints 的 GREASE 品牌按 Chrome 主版本计算；UA 字符串为 138.0.0.0，完整版本列表为 138.0.7204.50</li>
+            <li>Win10 与 Win11 共用 UA，platformVersion 分别为 10.0.19045 与 10.0.22631；Win7 / Win8 按 Win10 输出</li>
+            <li>Canvas、WebGL 噪音模式生成稳定像素点；音频与 ClientRects 在噪音值为 0 时补上按环境固定的偏移</li>
+            <li>MCP 为 36 个工具；另有 RPA（32 种步骤、定时与录制）和本机 Chat 模型转发</li>
+          </ul>
+        </div>
+
+        <div class="release reveal">
+          <div class="release-meta">
+            <span class="ver">v2.2.39</span>
+            <span class="date">2026-06-26</span>
+          </div>
+          <ul class="release-notes">
+            <li>版本徽标升至 2.2.39，新增 MCP 徽标</li>
+            <li>补充 MCP AI 自动化、DNS 防泄露、设备指纹伪装（主机名 / MAC / SSL / 硬件加速）、UACH 自洽、重型网站稳定等特性</li>
+            <li>新增「🤖 MCP AI 自动化」文档：13 工具说明 + .mcp.json 配置示例 + 典型流程</li>
+            <li>指纹参数表新增 6 项：UACH/Client Hints、DNS 防泄露、SSL/TLS、设备名、MAC、硬件加速（共 25+ 维度）</li>
+          </ul>
+        </div>
+
+        <div class="release reveal">
+          <div class="release-meta">
+            <span class="ver">v2.2.18</span>
+            <span class="date">2026-06-16</span>
+          </div>
+          <ul class="release-notes">
+            <li>迭代修复 bug，稳定性提升</li>
+          </ul>
+        </div>
+
+        <div class="release reveal">
+          <div class="release-meta">
+            <span class="ver">v1.0.1</span>
+            <span class="date">2026-03-17</span>
+          </div>
+          <ul class="release-notes">
+            <li>增加指定 Cookie 功能</li>
+          </ul>
+        </div>
+
+        <div class="release reveal">
+          <div class="release-meta">
+            <span class="ver">v1.0.0</span>
+            <span class="date">2026-03-13</span>
+          </div>
+          <ul class="release-notes">
+            <li>首个公开版本：基于 Chromium 的开源指纹浏览器，支持多环境隔离与全参数指纹配置</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="release-more reveal">
+        <a href="https://github.com/sunny5156/CrossGuard/releases" class="btn btn-ghost" target="_blank" rel="noopener">查看全部版本 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Download CTA ===== -->
+  <section class="cta-band">
+    <div class="container cta-inner reveal">
+      <div class="cta-glow"></div>
+      <h2>开始构建你的专属浏览器环境</h2>
+      <p>免费、开源、开箱即用。Windows 平台，一键安装。</p>
+      <a href="https://github.com/sunny5156/CrossGuard/releases/latest" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        下载 CrossGuard v2.4.7
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section" id="faq">
+    <div class="container container-narrow">
+      <div class="section-head reveal">
+        <span class="section-tag">常见问题</span>
+        <h2 class="section-title">FAQ</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item reveal">
+          <summary>CrossGuard 是免费的吗？<span class="faq-icon"></span></summary>
+          <div class="faq-answer"><p>是的。CrossGuard 完全开源免费，源码与所有发布版本均托管在 GitHub（<a href="https://github.com/sunny5156/CrossGuard" target="_blank" rel="noopener">sunny5156/CrossGuard</a>）。</p></div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>基于 Chromium 哪个版本？支持什么系统？<span class="faq-icon"></span></summary>
+          <div class="faq-answer"><p>当前安装包版本为 <strong>v2.4.7</strong>，内核是自编译的 <strong>Chromium 138.0.7204.50</strong>。支持 <strong>Windows 10 / 11</strong>。界面里的 Windows 7 / 8 选项会输出与 Windows 10 相同的 UA，因为 Chrome 138 不能运行在这些系统上。</p></div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>“指纹伪装”具体包含哪些维度？<span class="faq-icon"></span></summary>
+          <div class="faq-answer"><p>UA 字符串是 <code>Chrome/138.0.0.0</code>，Client Hints 的完整版本是 <code>138.0.7204.50</code>，GREASE 品牌按这个主版本计算。语言在进程启动前按代理出口写入。Canvas 与 WebGL 的噪音是按环境固定的像素偏移，同一环境多次读回一致。字体列表可以保存在配置里，当前内核仍使用本机字体。</p></div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>什么是 MCP AI 自动化？怎么用？<span class="faq-icon"></span></summary>
+          <div class="faq-answer"><p>管理界面可启动 MCP 服务（<code>127.0.0.1:18901</code>），Token 写在本机。36 个工具分成环境管理、页面读取与操作、标签页和文件导出。配置 <code>.mcp.json</code> 后，可在 Claude Code、Cursor 等客户端里用自然语言驱动对应环境。RPA 是另一套可定时的步骤流程，不经过 MCP。</p></div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>书签 / 历史 / Cookie / 密码能跨设备同步吗？<span class="faq-icon"></span></summary>
+          <div class="faq-answer"><p>搭配 <strong>CrossGuardServer</strong> 可实现同一账号多主机环境同步：当前已支持 <strong>书签 + 浏览历史</strong> 的云端同步。Cookie 与账号密码因涉及本机密钥绑定（App-Bound Encryption），将在后续版本通过 CDP / 密钥搬运方案支持。</p></div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>如何快速开始使用？<span class="faq-icon"></span></summary>
+          <div class="faq-answer"><p>① 从 GitHub Releases 下载安装包；② 安装并启动 CrossGuard；③ 新建一个环境；④ 配置指纹与代理参数；⑤ 点击启动即可使用。环境数据互相隔离，可无限多开。</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#hero" class="brand">
+          <span class="brand-logo">
+            <svg viewBox="0 0 32 32" width="26" height="26" fill="none" aria-hidden="true">
+              <path d="M16 2 4 7v8c0 8 5 12 12 15 7-3 12-7 12-15V7L16 2Z" stroke="url(#g2)" stroke-width="1.6"/>
+              <path d="M11 16.5l3.2 3.2L21 13" stroke="url(#g2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs><linearGradient id="g2" x1="4" y1="2" x2="28" y2="30"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+            </svg>
+          </span>
+          <span class="brand-name">CrossGuard</span>
+        </a>
+        <p class="footer-tag">开源指纹浏览器 · 让每个环境都独一无二。</p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>产品</h5>
+          <a href="#features">核心特性</a>
+          <a href="#fingerprint">指纹参数</a>
+          <a href="#mcp">MCP 自动化</a>
+          <a href="#releases">版本更新</a>
+        </div>
+        <div class="footer-col">
+          <h5>资源</h5>
+          <a href="https://github.com/sunny5156/CrossGuard/releases/latest" target="_blank" rel="noopener">下载最新版</a>
+          <a href="https://github.com/sunny5156/CrossGuard/releases" target="_blank" rel="noopener">全部版本</a>
+          <a href="https://github.com/sunny5156/CrossGuard" target="_blank" rel="noopener">源代码</a>
+          <a href="#faq">常见问题</a>
+        </div>
+        <div class="footer-col">
+          <h5>关注</h5>
+          <a href="https://github.com/sunny5156/CrossGuard" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/sunny5156/CrossGuard/releases.atom" target="_blank" rel="noopener">RSS 订阅</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© <span id="year">2026</span> CrossGuard · 本项目开源，仅供学习与合规的多账号管理使用。</p>
+        <p class="footer-disclaimer">请遵守当地法律法规，勿用于任何违法违规用途。</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
